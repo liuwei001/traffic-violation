@@ -82,6 +82,14 @@ dependencies {
     	'org.aspectj:aspectjweaver:1.7.4'
     )
     
+    //fasterxml jackson
+    compile(
+    	'com.fasterxml.jackson.core:jackson-core:'+jacksonVersion,
+    	'com.fasterxml.jackson.core:jackson-databind:'+jacksonVersion,
+    	'com.fasterxml.jackson.core:jackson-annotations:'+jacksonVersion,
+    	'com.fasterxml.jackson.module:jackson-module-jaxb-annotations:'+jacksonVersion
+    )
+    
     //slf4j
     compile(
     	'org.slf4j:slf4j-api:'+slf4jVersion,

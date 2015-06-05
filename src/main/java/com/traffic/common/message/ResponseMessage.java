@@ -14,42 +14,42 @@ public class ResponseMessage {
 	/**
 	 * 返回编码
 	 */
-	private int returnCode = 0; 
+	private String resultCode = "0"; 
 	
 	/**
 	 * 返回信息
 	 */
-	private String returnInfo = "操作成功";
+	private String resultMsg = "操作成功";
 	
 	/**
 	 * 响应对象
 	 */
-	private Object response;
+	private Object result;
 
-	
-	public Object getResponse() {
-		return response;
+	public String getResultCode() {
+		return resultCode;
 	}
 
-	public void setResponse(Object response) {
-		this.response = response;
+	public void setResultCode(String resultCode) {
+		this.resultCode = resultCode;
 	}
 
-	public String getReturnInfo() {
-		return returnInfo;
+	public String getResultMsg() {
+		return resultMsg;
 	}
 
-	public void setReturnInfo(String returnInfo) {
-		this.returnInfo = returnInfo;
+	public void setResultMsg(String resultMsg) {
+		this.resultMsg = resultMsg;
 	}
 
-	public int getReturnCode() {
-		return returnCode;
+	public Object getResult() {
+		return result;
 	}
 
-	public void setReturnCode(int returnCode) {
-		this.returnCode = returnCode;
+	public void setResult(Object result) {
+		this.result = result;
 	}
+
 	
 	
 }

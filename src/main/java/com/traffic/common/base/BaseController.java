@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.traffic.common.configuration.PropertiesCfgHolder;
-import com.traffic.common.enumcode.ReturnCodeEnum;
+import com.traffic.common.enumcode.ResultCodeEnum;
 import com.traffic.common.message.ResponseMessage;
 import com.traffic.common.utils.http.HttpClientUtils;
 
@@ -74,10 +73,10 @@ public class BaseController {
 	 *@param returnInfo
 	 *@return
 	 */
-	protected ResponseMessage getResponseMsg_failed(ReturnCodeEnum codeEnum) {
+	protected ResponseMessage getResponseMsg_failed(ResultCodeEnum codeEnum) {
 		ResponseMessage resMsg = new ResponseMessage();
-		resMsg.setReturnCode(codeEnum.getReturnCode());
-		resMsg.setReturnInfo(codeEnum.getReturnInfo());
+		resMsg.setResultCode(codeEnum.getResultCode());
+		resMsg.setResultMsg(codeEnum.getResultMsg());
 		if (logger.isDebugEnabled()) {
 			logger.debug("\r\n响应body:" + JSONObject.toJSONString(resMsg));
 		}
@@ -92,7 +91,7 @@ public class BaseController {
 	 */
 	protected ResponseMessage getResponseMsg_success(Object object) {
 		ResponseMessage resMsg = new ResponseMessage();
-		resMsg.setResponse(object);
+		resMsg.setResult(object);
 		if (logger.isDebugEnabled()) {
 			logger.debug("\r\n响应body:" + JSONObject.toJSONString(resMsg));
 		}
@@ -114,8 +113,8 @@ public class BaseController {
 		
 		if(StringUtils.isBlank(coreUrl)) {
 			ResponseMessage resMsg = new ResponseMessage();
-			resMsg.setReturnCode(ReturnCodeEnum.REQUEST_PARAM_ISNULL.getReturnCode());
-			resMsg.setReturnInfo("core.addRelate.url is null");
+			resMsg.setResultCode(ResultCodeEnum.REQUEST_PARAM_ISNULL.getResultCode());
+			resMsg.setResultMsg("core.addRelate.url is null");
 			return resMsg;
 		}
 		try {
@@ -125,8 +124,8 @@ public class BaseController {
 			e.printStackTrace();
 			logger.error(e);
 			ResponseMessage resMsg = new ResponseMessage();
-			resMsg.setReturnCode(ReturnCodeEnum.SYSTEM_EXCEPTION.getReturnCode());
-			resMsg.setReturnInfo(e.getMessage());
+			resMsg.setResultCode(ResultCodeEnum.SYSTEM_EXCEPTION.getResultCode());
+			resMsg.setResultMsg(e.getMessage());
 			return resMsg;
 		}
 	}

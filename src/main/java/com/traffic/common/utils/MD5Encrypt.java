@@ -4,8 +4,15 @@ import java.security.MessageDigest;
 
 import org.apache.log4j.Logger;
 
+/**
+ * MD5加密工具
+ * 
+ * @author Administrator
+ *
+ */
 public class MD5Encrypt {
-    protected static final Logger log = Logger.getLogger(MD5Encrypt.class);
+	protected static final Logger log = Logger.getLogger(MD5Encrypt.class);
+
 	public MD5Encrypt() {
 	}
 
@@ -18,25 +25,24 @@ public class MD5Encrypt {
 	 * @return String
 	 */
 	public static String encrypt(String password) {
-		
+
 		String encryptPasswd = "";
-		
+
 		try {
 			MessageDigest alg = MessageDigest.getInstance("MD5");
 			alg.update(password.getBytes());
 			byte[] digesta = alg.digest();
-			
+
 			encryptPasswd = byte2hex(digesta);
 		} catch (Exception e) {
-		    log.error(e);
+			log.error(e);
 		}
-		
 
 		return encryptPasswd;
 	}
-	
+
 	private static String byte2hex(byte[] b) {
-		
+
 		StringBuffer hs = new StringBuffer();
 		String stmp = "";
 		int len = b.length;
@@ -50,9 +56,10 @@ public class MD5Encrypt {
 
 		return hs.toString();
 	}
-	
+
 	public static void main(String[] args) throws Exception {
-		System.out.println(MD5Encrypt.encrypt("GD_ShenZhen粤BA804D9fdcd715d108a0bd51f481b3571ea2db"));
+		System.out.println(MD5Encrypt
+				.encrypt("GD_ShenZhen粤BA804D9fdcd715d108a0bd51f481b3571ea2db"));
 	}
 
 }

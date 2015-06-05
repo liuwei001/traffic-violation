@@ -31,8 +31,21 @@
                         <span class="active">输入车辆信息<i class="icon"></i></span>
                         <span>查看违章结果<i class="icon"></i></span>
                     </div>
-                    <form class="form-horizontal">
-                        <div class="form-group list-container">
+                    <form class="form-horizontal" id="form" onsubmit="return false;">
+                    
+                     <input type="hidden" value="GD_ShenZhen" id="city"  name="city" >
+                     <input type="hidden" value="粤BA804D" id="carno"  name="carno" >
+                     <input type="hidden" value="02" id="cartype"  name="cartype" />
+                     <input type="hidden" value="C32764" id="engineno" name="engineno" >
+                     <input type="hidden" value="064484" id="classno" name="classno" >
+                     <input type="hidden" id="mobile" name="mobile" >
+                     <input type="hidden" id="buyyear" name="buyyear" >
+                     <input type="hidden" id="driver" name="driver" >
+                     <input type="hidden" id="buyprice" name="buyprice" >
+                     <input type="hidden" id="carmodel" name="carmodel" >
+                     <input type="hidden" id="insurancemonth" name="insurancemonth" />
+                    
+                        <div class="form-group list-container" >
                             <label class="col-xs-2 control-label">违章区域</label>
                             <div class="col-xs-6">
                                 <input id="city" type="text" class="form-control" readonly>
@@ -121,7 +134,7 @@
                             </div>
                             <div class="col-xs-4 control-label">支持全国300多个城市违章查询</div>
                         </div>
-                        <div class="form-group">
+                        <!--<div class="form-group">
                             <label class="col-xs-2 control-label">车牌号码</label>
                             <div class="col-xs-6 two-field">
                                 <div class="select-content">
@@ -143,11 +156,48 @@
                                 <input type="text" class="form-control">
                             </div>
                             <div class="col-xs-4 control-label-big"><a href="history.html">历史车辆信息</a></div>
+                        </div> -->
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label">车牌号码</label>
+                            <div class="col-xs-6">
+                                <input type="text" class="form-control" placeholder="请输入车牌号码" name="carno" id="carno">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-2 control-label">车辆类型</label>
+                            <div class="col-xs-6 ">
+                                <div class="select-content">
+                                    <input class="form-control select-input" type="text" value="" readonly>
+                                    <div class="select-input-list">
+                                        <ul>
+                                            <li onclick="selectCatType('01');">大型车</li>
+											<li onclick="selectCatType('02');"> 小型车</li>
+											<li onclick="selectCatType('03');">使馆汽车</li>
+											<li onclick="selectCatType('04');">领馆汽车</li>
+											<li onclick="selectCatType('05');">境外汽</li>
+											<li onclick="selectCatType('06');">外籍汽</li>
+											<li onclick="selectCatType('07');">两,三轮摩托</li>
+											<li onclick="selectCatType('08');">轻便摩托</li>
+											<li onclick="selectCatType('09');">使馆摩托</li>
+											<li onclick="selectCatType('10');">领馆摩托</li>
+											<li onclick="selectCatType('11');">境外摩托</li>
+											<li onclick="selectCatType('12');">外籍摩托</li>
+											<li onclick="selectCatType('13');">低速</li>
+											<li onclick="selectCatType('14');">拖拉机</li>
+											<li onclick="selectCatType('15');"> 挂</li>
+											<li onclick="selectCatType('16');"> 教练汽</li>
+											<li onclick="selectCatType('17');"> 教练摩托</li>
+											<li onclick="selectCatType('18');"> 试验汽</li>
+                                        </ul>
+                                    </div>
+                                    <label class="icon arrow first" for="num"></label>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="col-xs-2 control-label">发动机号</label>
                             <div class="col-xs-6">
-                                <input type="text" class="form-control" placeholder="请输入发动机号">
+                                <input type="text" class="form-control" placeholder="请输入发动机号" name="engineno" id="engineno">
                             </div>
                             <div class="col-xs-4 control-label ">
                                 <span class="icon help">
@@ -160,7 +210,7 @@
                         <div class="form-group">
                             <label class="col-xs-2 control-label">车 架 号</label>
                             <div class="col-xs-6">
-                                <input type="text" class="form-control" placeholder="请输入车架号">
+                                <input type="text" class="form-control" placeholder="请输入车架号" name="classno" id="classno">
                             </div>
                             <div class="col-xs-4 control-label prompt">
                                 <span class="icon help">
@@ -174,23 +224,14 @@
                             <label class="col-xs-2 control-label">购车时间</label>
                             <div class="col-xs-6 two-field">
                                 <div class="select-content">
-                                    <input type="text" class="form-control select-input" readonly>
+                                    <input class="form-control select-input" type="text" value="" width="100%" readonly>
                                     <div class="select-input-list">
-                                        <ul>
-                                            <li>1993年</li>
-                                            <li>1994年</li>
-                                            <li>1995年</li>
-                                            <li>1996年</li>
-                                            <li>1997年</li>
-                                            <li>1998年</li>
-                                            <li>1999年</li>
-                                            <li>2000年</li>
-                                        </ul>
+                                        <ul id="buyyear_li"></ul>
                                     </div>
                                     <label class="icon arrow first" for="year"></label>
                                 </div>
                                 <div class="select-content">
-                                    <input type="text" class="form-control select-input" readonly>
+                                    <input class="form-control select-input" type="text" value="" readonly>
                                     <div class="select-input-list">
                                         <ul>
                                             <li>1月</li>
@@ -201,10 +242,15 @@
                                             <li>6月</li>
                                             <li>7月</li>
                                             <li>8月</li>
+                                            <li>9月</li>
+                                            <li>10月</li>
+                                            <li>11月</li>
+                                            <li>12月</li>
                                         </ul>
                                     </div>
-                                    <label class="icon arrow first" for="year"></label>
-                                </div>                            </div>
+                                    <label class="icon arrow first" for="num"></label>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label class="col-xs-2 control-label">手 机 号</label>
@@ -218,13 +264,10 @@
                                 <input type="text" class="form-control" placeholder="请输入手机验证动态密码">
                                 <button class="btn btn-secondary">发送短信动态密码</button>
                             </div>
-                            <div class="col-xs-4 control-label">
-                                看不清？<a href="">换一个</a>
-                            </div>
                         </div>
                         <div class="form-group">
                             <div class="col-xs-offset-3 col-xs-3">
-                                <a href="result.html" class="btn btn-primary btn-lg btn-block">查询结果</a>
+                                <input type="submit" value="查询结果" class="btn btn-primary btn-lg btn-block">
                             </div>
                         </div>
                     </form>
@@ -247,6 +290,34 @@
     window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')
     </script>
     <script src="js/main.js"></script>
+    <script type="text/javascript">
+    $(function() {
+    	var myDate = new Date();
+    	var currYear = myDate.getFullYear();
+    	var array_li = [];
+    	for(var i = 1993; i <= currYear; i++ ) {
+    		array_li.push("<li>" + i + "年</li>");
+    	}
+    	//设置购车时间年份 从1993年开始
+    	$("#buyyear_li").html(array_li.join(""));
+    	$('.select-content').selectBox();
+    	
+    	$("#form").submit(function() {
+    		var param = "";
+    		$("input[type=hidden]").each(function() {
+    			if(param != "") {
+    				param += "&";
+    			}
+    			param = param + $(this).attr("name") + "=" + $(this).val();
+    		});
+    		window.location = "view/result.html?" + param;
+    	});
+    });
+    //选择车辆类型
+    function selectCatType(cartype) {
+    	$("#cartype").val(cartype);
+    }
+    </script>
 </body>
 
 </html>
