@@ -131,7 +131,7 @@ public class HttpClientUtils {
 	 */
 	public static String httpPost_JSONObject(String url, JSONObject reqParam) {
 		logger.debug("httpPost URL [" + url + "] start ");
-		logger.debug("httpPost body :" + reqParam.toJSONString());
+		logger.debug("httpPost param :" + reqParam.toJSONString());
 		HttpClient httpclient = null;
 		HttpPost httpPost = null;
 		HttpResponse response = null;

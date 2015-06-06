@@ -1,6 +1,7 @@
 //list选择效果
 $(function() {
-    var arr = [],
+
+	/*var arr = [],
         content = $('.list-content > .tab-content'),
         input = $('#city'),
         btn = $('#hide-list'),
@@ -8,10 +9,9 @@ $(function() {
         values = "";
 
     function choose() {
-
         var value = $(this).html();
         values = "";
-
+        alert(value)
         if ($(this).hasClass('active')) {
             $(this).removeClass('active');
             arr.splice($.inArray(value, arr), 1);
@@ -30,12 +30,12 @@ $(function() {
     }
 
     item.click(choose);
-
+	
     input.add(btn).click(function() {
         $('.select-list').toggle();
 
         return false;
-    });
+    });*/
 });
 
 //禁用按钮

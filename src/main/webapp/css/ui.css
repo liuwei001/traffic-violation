@@ -1855,10 +1855,10 @@ input[type="button"].btn-block {
 .main-content .col-xs-4.control-label {
   color: #b9b9b9;
 }
-#city {
+#city_text {
   cursor: pointer;
 }
-#city[readonly] {
+#city_text[readonly] {
   background: #fff;
 }
 .select-list {

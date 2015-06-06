@@ -1,4 +1,4 @@
-var contextpath = "/traffic-violation/";
+var contextpath = "/weizhang/";
 
 //公共Ajax请求 获取数据
 var syncData = function(api,type,params,callback,async){
@@ -26,7 +26,7 @@ var syncData = function(api,type,params,callback,async){
             if(parseInt(data.resultCode) == "0"){ //成功
 	            callback(true,data.result);
             }else{
-                callback(false,data.message);
+                callback(false,data.resultMsg);
             }
 		},
 		error:function (xhr, textStatus, errorThrown) {

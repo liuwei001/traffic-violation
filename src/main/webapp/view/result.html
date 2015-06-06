@@ -133,14 +133,16 @@
     	$("#carno").html("[" + reqParam.carno + "]");
     	syncData("querylist","POST",reqParam,function(success,data){
 	        if(success == true){
-	        	if(data == null) {
-	        	} else {
+	        	if(data != null) {
 	        		var weizhangdata = {};
 	        		weizhangdata.weizhanglist = data;
 	        		$("#weizhang_info").html($("#list_template").render(weizhangdata));
+	        	} else {
+	        		$("#weizhang_info").html("<div class='no-result'><h2 class='text-primary'>恭喜，</h2><p>该车辆暂无违章记录</p></div>");
 	        	}
 	            
 	        }else{
+	        	$("#weizhang_info").html("<center><span style='font-size:12px;color:red'>系统请求出错,"+ data +"</span></center>");
 	        }
 	    });
     });
