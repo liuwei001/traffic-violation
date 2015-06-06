@@ -12,7 +12,7 @@ public enum ResultCodeEnum {
 	
 	SYSTEM_EXCEPTION("1000001","服务器异常"),
 	
-	REQUEST_PARAM_ISNULL("1010001","请求参数为null"),
+	REQUEST_PARAM_ISNULL("1010001","缺少必要参数"),
 	REQUEST_PARAM_ERROR("1010002","请求参数格式化错误");
 
 	/**

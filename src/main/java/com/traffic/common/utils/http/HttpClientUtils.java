@@ -20,6 +20,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpConnectionParams;
@@ -97,7 +98,7 @@ public class HttpClientUtils {
             httpPost.setEntity(stringEntity);
             
 			// 设置连接超时时间
-			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),4000);
+			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),40000);
 			// 设置读数据超时时间
 			HttpConnectionParams.setSoTimeout(httpPost.getParams(),200000);
 			response = httpclient.execute(httpPost);
@@ -139,7 +140,8 @@ public class HttpClientUtils {
 		String result = "";
 
 		try {
-			httpclient = HttpConnectionManager.getHttpClient();
+//			httpclient = HttpConnectionManager.getHttpClient();
+			httpclient = new DefaultHttpClient();
 			// 设置cookie的兼容性---考虑是否需要
 			httpclient.getParams().setParameter(ClientPNames.COOKIE_POLICY,
 					CookiePolicy.BROWSER_COMPATIBILITY);
@@ -159,7 +161,7 @@ public class HttpClientUtils {
 	        httpPost.setEntity(uefEntity);  
             
 			// 设置连接超时时间
-			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),4000);
+			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),40000);
 			// 设置读数据超时时间
 			HttpConnectionParams.setSoTimeout(httpPost.getParams(),200000);
 			response = httpclient.execute(httpPost);

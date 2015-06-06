@@ -61,6 +61,15 @@ public interface IBaseService
     public <T extends Serializable> List<T> findAll() throws DalException;
     
     /**
+	 * 查询列表
+	 * @param map
+	 * @return
+	 * @throws DalException
+	 */
+	public <T extends Serializable> List<T> queryList(Map<String, Object> map)
+			throws DalException;
+    
+    /**
      * 分页查询满足条件的实体对象
      * @param map 查询需要的参数,可以是MAP或实体,当为NULL时表示没有参数
      * @param currPage 当前页码

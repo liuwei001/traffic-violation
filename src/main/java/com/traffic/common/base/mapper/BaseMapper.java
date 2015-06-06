@@ -69,4 +69,12 @@ public interface BaseMapper {
      * @return PageList 列表
      */
     public <T extends Serializable> List<T> queryForPageList(Map<String, Object> map) throws DalException;
+    
+    /**
+     * 不分页查询
+     * @param map
+     * @return
+     * @throws DalException
+     */
+    public <T extends Serializable> List<T> queryList(Map<String, Object> map) throws DalException;
 }

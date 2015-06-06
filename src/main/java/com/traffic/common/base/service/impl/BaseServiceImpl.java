@@ -67,6 +67,17 @@ public abstract class BaseServiceImpl	implements IBaseService {
 			throws DalException {
 		return getMapper().findAll();
 	}
+	
+	/**
+	 * 查询列表
+	 * @param map
+	 * @return
+	 * @throws DalException
+	 */
+	public <T extends Serializable> List<T> queryList(Map<String, Object> map)
+			throws DalException {
+		return getMapper().queryList(map);
+	}
 
 	/**
 	 * 分页查询列表

@@ -29,7 +29,9 @@
         <div class="result">
             <h5><span class="text-primary" id="carno"></span> 违章信息</h5>
             <span id="weizhang_info">
-            
+            	<div class='no-result'>
+            		<p>正在查询，请稍候............</p>
+            	</div>
             </span>
         </div>
         <div class="row subscibe">
@@ -101,7 +103,6 @@
                 <thead>
                     <tr>
                         <th>违章时间</th>
-                        <th>违章城市</th>
                         <th>违章地点</th>
                         <th>违章条例</th>
                         <th>扣分</th>
@@ -114,7 +115,6 @@
 {{for weizhanglist}}
                      <tr>
                     <td>{{:date}}</td>
-                    <td>深圳市</td>
                  <td>{{:area}}</td>
                  <td>{{:act}}</td>
                  <td>{{:fen}}</td>
@@ -142,7 +142,7 @@
 	        	}
 	            
 	        }else{
-	        	$("#weizhang_info").html("<center><span style='font-size:12px;color:red'>系统请求出错,"+ data +"</span></center>");
+	        	$("#weizhang_info").html("<div class='no-result'><span style='font-size:12px;color:red'>系统请求出错,"+ data +"</span></div>");
 	        }
 	    });
     });

@@ -13,44 +13,25 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="stylesheet" href="css/ui.css">
-    <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+    <link rel="stylesheet" href="../css/ui.css">
+    <script src="../js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 
 <body>
     <div class="container gap">
-        <img class="img-responsive" src="img/head.jpg" alt="">
+        <img class="img-responsive" src="../img/head.jpg" alt="">
     </div>
 
     <div class="container gap">
         <div>
-            <img class="img-responsive" src="./img/result.jpg" alt="">
+            <img class="img-responsive" src="../img/result.jpg" alt="">
         </div>
         <div class="result">
-            <table class="table table-bordered table-gray">
-                <tbody>
-                    <tr>
-                        <td><img class="table-img" src="img/car.jpg" alt="">奔驰E230</td>
-                        <td class="text-primary">[粤BD8888]</td>
-                        <td><button class="btn btn-primary">查询此车违章信息</button></td>
-                    </tr>
-                    <tr>
-                        <td><img class="table-img" src="img/car.jpg" alt="">奔驰E230</td>
-                        <td class="text-primary">[粤BD8888]</td>
-                        <td><button class="btn btn-primary">查询此车违章信息</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-<!--         <div class="row subscibe">
-            <div class="col-xs-2">
-                <span class="btn btn-primary btn-block">免费订阅</span>
-            </div>
-            <div class="col-xs-10">
-                如有违章信息，平安免费及时通知您。
+        	<div class='no-result'>
+            		<p>正在查询，请稍候............</p>
             </div>
         </div>
- -->        <div class="explain">
+        <div class="explain">
             <h5 class="text-primary">处理交通违法须知：</h5>
             <p>一、当事人在现场接到交警当场查处并开出的《处罚决定书》的，应在十五日内持《处罚决定书》到银行缴纳罚款。对只处罚款的，逾期不缴纳的，每日按罚款数额的百分之三加处。对扣留机动车或驾驶证的，应携带有效驾驶证、行驶证、身份证到执法单位接收处理。 </p>
             <p>二、对交通技术监控设备记录的交通违法行为（指到交警部门接受处理）<br>
@@ -61,49 +42,66 @@
         </div>
     </div>
     <div class="container">
-        <img class="img-responsive" src="img/footer.jpg" alt="">
+        <img class="img-responsive" src="../img/footer.jpg" alt="">
     </div>
 
 
-<!--     <div class="alert" style="display: none;">
-        <div class="light-box"></div>
-        <div class="message">
-            <h5>免费订阅<button class="close"><span aria-hidden="true">&times;</span></button></h5>
-            <div class="form-horizontal info">
-                <div class="form-group">
-                    <label class="col-xs-2 control-label">手机号</label>
-                    <div class="col-xs-10">
-                        <input type="text" class="form-control">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-xs-2 control-label">手机号</label>
-                    <div class="col-xs-7">
-                        <input type="text" class="form-control">
-                    </div>
-                    <div class="col-xs-3">
-                        <span class="btn btn-secondary btn-block">免费获取</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-offset-3 col-xs-6">
-                        <span id="subscribe" class="btn btn-primary btn-lg btn-block">免费订阅</span>
-                    </div>
-                </div>
-            </div>
-            <div class="info hide">
-                <h4 class="text-primary">恭喜，</h4>
-                <p>您已成功订阅平安违章查询服务，将定期将粤BD8888违章信息发送至您预留的1343338888手机中。</p>
-            </div>
-        </div>
-    </div>
- -->
     <script src="http://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
     <script>
     window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')
     </script>
-    <!-- <script src="js/tab.js"></script> -->
-    <script src="js/main.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/common/common.js"></script>
+    <script src="../js/common/Utility.js"></script>
+    <script src="../js/vendor/jsrender.min.js"></script>
+    <script id="list_template" type="text/x-jsrender">
+         <table class="table table-bordered table-gray">
+                <tbody>
+					{{for resultlist}}
+                    <tr>
+                        <td><img class="table-img" src="../img/car.jpg" alt="">{{:carmodel}}</td>
+                        <td class="text-primary">[{{:carno}}]</td>
+                        <td><button class="btn btn-primary" onclick="redirectToQuery('{{:#index}}')">查询此车违章信息</button></td>
+                    </tr>
+					{{/for}}
+                </tbody>
+            </table>
+	</script>
+    <script type="text/javascript">
+    var array = [];
+    $(function() {
+    	var reqParam = parseUrlParam(false);
+    	syncData("queryHistorylist","POST",reqParam,function(success,data){
+	        if(success == true){
+	        	if(data != null) {
+	        		var result = {};
+	        		result.resultlist = data;
+	        		array = data;
+	        		$(".result").html($("#list_template").render(result));
+	        	} else {
+	        		$(".result").html("<div class='no-result'><p>暂无车辆历史查询记录</p></div>");
+	        	}
+	            
+	        }else{
+	        	$(".result").html("<div class='no-result'><span style='font-size:12px;color:red'>系统请求出错,"+ data +"</span></div>");
+	        }
+	    });
+    });
+    
+    function redirectToQuery(dataIndex) {
+    	var weizhanginfo = array[dataIndex];
+    	var param = [];
+    	if(weizhanginfo != null) {
+    		param.push("city,"+weizhanginfo.city);
+    		param.push("cartype,"+weizhanginfo.cartype);
+    		param.push("carno,"+weizhanginfo.carno);
+    		param.push("engineno,"+weizhanginfo.engineno);
+    		param.push("classno,"+weizhanginfo.classno);
+    		param.push("mobile,"+weizhanginfo.mobile);
+    	}
+    	window.location = "../index.html?" + serializeMetaInfo(param.join(";"));
+    }
+    </script>
 </body>
 
 </html>

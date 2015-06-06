@@ -64,6 +64,21 @@
                                                     <li code="GD_GuangZhou">广州</li>
                                                     <li code="GD_ShenZhen">深圳</li>
                                                     <li code="JS_SuZhou">苏州</li>
+                                                    <li code="ZJ_HangZhou">杭州</li>
+                                                    <li code="JS_NanJing">南京</li>
+                                                    <li code="TJ">天津</li>
+                                                    <li code="SD_JiNan">济南</li>
+                                                    <li code="SD_QingDao">青岛</li>
+                                                    <li code="HUB_WuHan">武汉</li>
+                                                    <li code="HN_ChangSha">长沙</li>
+                                                    <li code="LN_ShenYang">沈阳</li>
+                                                    <li code="SC_ChengDu">成都</li>
+                                                    <li code="CQ">重庆</li>
+                                                    <li code="S3X_XiAn">西安</li>
+                                                    <li code="AH_HeFei">合肥</li>
+                                                    <li code="FJ_FuZhou">福州</li>
+                                                    <li code="JL_ChangChun">长春</li>
+                                                    <li code="HB_ShiJiaZhuang">石家庄</li>
                                                 </ul>
                                             </div>
                                             <div role="tabpanel" class="tab-pane" id="ABCD">
@@ -91,60 +106,38 @@
                             </div>
                             <div class="col-xs-4 control-label">支持全国300多个城市违章查询</div>
                         </div>
-                        <!--<div class="form-group">
-                            <label class="col-xs-2 control-label">车牌号码</label>
-                            <div class="col-xs-6 two-field">
-                                <div class="select-content">
-                                    <input class="form-control select-input" type="text" value="" id="num" readonly>
-                                    <div class="select-input-list">
-                                        <ul>
-                                            <li>1993年</li>
-                                            <li>1994年</li>
-                                            <li>1995年</li>
-                                            <li>1996年</li>
-                                            <li>1997年</li>
-                                            <li>1998年</li>
-                                            <li>1999年</li>
-                                            <li>2000年</li>
-                                        </ul>
-                                    </div>
-                                    <label class="icon arrow first" for="num"></label>
-                                </div>
-                                <input type="text" class="form-control">
-                            </div>
-                            <div class="col-xs-4 control-label-big"><a href="history.html">历史车辆信息</a></div>
-                        </div> -->
                         <div class="form-group">
                             <label class="col-xs-2 control-label">车牌号码</label>
                             <div class="col-xs-6">
-                                <input type="text" value="粤BA804D" class="form-control" placeholder="请输入车牌号码" name="carno" id="carno" lang="param">
+                                <input type="text" class="form-control" placeholder="请输入车牌号码" name="carno" id="carno" lang="param">
                             </div>
+                            <div class="col-xs-4 control-label-big"><a href="./view/check-history.html">历史车辆信息</a></div>
                         </div>
                         <div class="form-group">
-                            <label class="col-xs-2 control-label">车辆类型</label>
+                            <label class="col-xs-2 control-label">车牌类型</label>
                             <div class="col-xs-6 ">
                                 <div class="select-content">
-                                    <input class="form-control select-input" type="text" value="" readonly>
+                                    <input class="form-control select-input" type="text" value="" id="cartype_text" readonly>
                                     <div class="select-input-list" style="width:100%">
                                         <ul>
-                                            <li onclick="selectCatType('01');">大型车</li>
-											<li onclick="selectCatType('02');"> 小型车</li>
-											<li onclick="selectCatType('03');">使馆汽车</li>
-											<li onclick="selectCatType('04');">领馆汽车</li>
-											<li onclick="selectCatType('05');">境外汽</li>
-											<li onclick="selectCatType('06');">外籍汽</li>
-											<li onclick="selectCatType('07');">两,三轮摩托</li>
-											<li onclick="selectCatType('08');">轻便摩托</li>
-											<li onclick="selectCatType('09');">使馆摩托</li>
-											<li onclick="selectCatType('10');">领馆摩托</li>
-											<li onclick="selectCatType('11');">境外摩托</li>
-											<li onclick="selectCatType('12');">外籍摩托</li>
-											<li onclick="selectCatType('13');">低速</li>
-											<li onclick="selectCatType('14');">拖拉机</li>
-											<li onclick="selectCatType('15');"> 挂</li>
-											<li onclick="selectCatType('16');"> 教练汽</li>
-											<li onclick="selectCatType('17');"> 教练摩托</li>
-											<li onclick="selectCatType('18');"> 试验汽</li>
+                                            <li onclick="selectCatType('01');" id="cartype_01">大型车</li>
+											<li onclick="selectCatType('02');" id="cartype_02">小型车</li>
+											<li onclick="selectCatType('03');" id="cartype_03">使馆汽车</li>
+											<li onclick="selectCatType('04');" id="cartype_04">领馆汽车</li>
+											<li onclick="selectCatType('05');" id="cartype_05">境外汽</li>
+											<li onclick="selectCatType('06');" id="cartype_06">外籍汽</li>
+											<li onclick="selectCatType('07');" id="cartype_07">两,三轮摩托</li>
+											<li onclick="selectCatType('08');" id="cartype_08">轻便摩托</li>
+											<li onclick="selectCatType('09');" id="cartype_09">使馆摩托</li>
+											<li onclick="selectCatType('10');" id="cartype_10">领馆摩托</li>
+											<li onclick="selectCatType('11');" id="cartype_11">境外摩托</li>
+											<li onclick="selectCatType('12');" id="cartype_12">外籍摩托</li>
+											<li onclick="selectCatType('13');" id="cartype_13">低速</li>
+											<li onclick="selectCatType('14');" id="cartype_14">拖拉机</li>
+											<li onclick="selectCatType('15');" id="cartype_15"> 挂</li>
+											<li onclick="selectCatType('16');" id="cartype_16"> 教练汽</li>
+											<li onclick="selectCatType('17');" id="cartype_17"> 教练摩托</li>
+											<li onclick="selectCatType('18');" id="cartype_18"> 试验汽</li>
                                         </ul>
                                     </div>
                                     <label class="icon arrow first" for="num"></label>
@@ -154,7 +147,7 @@
                         <div class="form-group">
                             <label class="col-xs-2 control-label">发动机号</label>
                             <div class="col-xs-6">
-                                <input type="text" value="C32764" class="form-control" placeholder="请输入发动机号" name="engineno" id="engineno"  lang="param" >
+                                <input type="text" class="form-control" placeholder="请输入发动机号" name="engineno" id="engineno"  lang="param" >
                             </div>
                             <div class="col-xs-4 control-label ">
                                 <span class="icon help">
@@ -167,7 +160,7 @@
                         <div class="form-group">
                             <label class="col-xs-2 control-label">车 架 号</label>
                             <div class="col-xs-6">
-                                <input type="text" value="064484" class="form-control" placeholder="请输入车架号" name="classno" id="classno"  lang="param" >
+                                <input type="text" class="form-control" placeholder="请输入车架号" name="classno" id="classno"  lang="param" >
                             </div>
                             <div class="col-xs-4 control-label prompt">
                                 <span class="icon help">
@@ -177,7 +170,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label class="col-xs-2 control-label">购车时间</label>
                             <div class="col-xs-6 two-field">
                                 <div class="select-content">
@@ -188,7 +181,7 @@
                                     <label class="icon arrow first" for="year"></label>
                                 </div>
                                 <div class="select-content">
-                                    <input class="form-control select-input" type="text" value="" readonly>
+                                    <input class="form-control select-input " type="text" value="" readonly>
                                     <div class="select-input-list">
                                         <ul>
                                             <li>1月</li>
@@ -208,7 +201,7 @@
                                     <label class="icon arrow first" for="num"></label>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <label class="col-xs-2 control-label">手 机 号</label>
                             <div class="col-xs-6">
@@ -224,7 +217,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-xs-offset-3 col-xs-3">
-                                <input type="submit" value="查询结果" class="btn btn-primary btn-lg btn-block">
+                                <input type="submit" value="查询" class="btn btn-primary btn-lg btn-block">
                             </div>
                         </div>
                     </form>
@@ -246,103 +239,14 @@
     <script>
     window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')
     </script>
-    
-    <script src="js/vendor/jsrender.min.js"></script>
-    <script src="js/common/Utility.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/vendor/jsrender.min.js"></script>
+    <script src="js/common/common.js"></script>
+    <script src="js/common/Utility.js"></script>
+    <script src="js/controller/index.js"></script>
     <script id="list_template" type="text/x-jsrender">
         <li code="{{:city_code}}">{{:city_name}}</li>
 	</script>
-    <script type="text/javascript">
-    $(function() {
-    	var myDate = new Date();
-    	var currYear = myDate.getFullYear();
-    	var array_li = [];
-    	for(var i = 1993; i <= currYear; i++ ) {
-    		array_li.push("<li>" + i + "年</li>");
-    	}
-    	
-    	//初始化城市
-    	initCitys() ;
-    	
-    	//设置购车时间年份 从1993年开始
-    	$("#buyyear_li").html(array_li.join(""));
-    	$('.select-content').selectBox();
-    	
-    	$("#form").submit(function() {
-    		var param = "";
-    		$("input[lang=param]").each(function() {
-    			if($(this).val() != "") {
-    				if(param != "") {
-        				param += "&";
-        			}
-        			param = param + $(this).attr("name") + "=" + $(this).val();
-    			}
-    		});
-    		window.location = "view/result.html?" + param;
-    	});
-    });
-    
-    //初始化城市信息
-    function initCitys() {
-    	syncData("citylist","GET",null,function(success,data){
-	        if(success == true){
-	        	if(data != null) {
-	        		$("#ABCD ul").html($("#list_template").render(data.abcd));
-	        		$("#EFGH ul").html($("#list_template").render(data.efgh));
-	        		$("#IJKLM ul").html($("#list_template").render(data.ijklm));
-	        		$("#NOPQR ul").html($("#list_template").render(data.nopqr));
-	        		$("#STUVW ul").html($("#list_template").render(data.stuvw));
-	        		$("#XYZ ul").html($("#list_template").render(data.xyz));
-	        		
-	        		var arr = [],
-	        		arr_code = [],
-	                content = $('.list-content > .tab-content'),
-	                input = $('#city_text'),
-	                btn = $('#hide-list'),
-	                item = content.find('li'),
-	                values = "",
-	                city_codes = "";
-	            	item.click(choose);
-	            	
-	            	function choose() {
-	                    var value = $(this).html();
-	                    var code = $(this).attr("code");
-	                    values = "";
-	                    codes = "";
-	                    if ($(this).hasClass('active')) {
-	                        $(this).removeClass('active');
-	                        arr.splice($.inArray(value, arr), 1);
-	                        arr_code.splice($.inArray(code, arr_code), 1);
-	                    } else {
-	                        if (arr.length < 3) {
-	                            $(this).addClass('active');
-	                            arr.push(value);
-	                            arr_code.push(code);
-	                        }
-	                    }
-
-	                    values = arr.join(', ');
-						codes = arr_code.join(',');
-	                    input.val(values);
-						$("#city").val(codes);
-	                }
-	            	
-	            	 input.add(btn).click(function() {
-	            	        $('.select-list').toggle();
-
-	            	        return false;
-	            	    });
-	        	} 	            
-	        }
-	    });
-    }
-    
-    //选择车辆类型
-    function selectCatType(cartype) {
-    	$("#cartype").val(cartype);
-    }
-    </script>
 </body>
 
 </html>

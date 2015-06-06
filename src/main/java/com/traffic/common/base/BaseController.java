@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.traffic.common.configuration.PropertiesCfgHolder;
 import com.traffic.common.enumcode.ResultCodeEnum;
 import com.traffic.common.message.ResponseMessage;
 import com.traffic.common.utils.http.HttpClientUtils;
@@ -104,21 +103,14 @@ public class BaseController {
 	 *@param configRequestUrlKey 配置的请求地址
 	 *@return
 	 */
-	protected ResponseMessage httpRequestToTrans(String configRequestUrlKey,String reqBody) {
-		String coreUrl = PropertiesCfgHolder.getProperty(configRequestUrlKey);
-		
+	protected ResponseMessage httpRequestToTrans(String reqUrl,String reqBody) {
+
 		if(logger.isDebugEnabled()) {
-			logger.debug("requestUrl = " + configRequestUrlKey);
+			logger.debug("requestUrl = " + reqUrl);
 		}
 		
-		if(StringUtils.isBlank(coreUrl)) {
-			ResponseMessage resMsg = new ResponseMessage();
-			resMsg.setResultCode(ResultCodeEnum.REQUEST_PARAM_ISNULL.getResultCode());
-			resMsg.setResultMsg("core.addRelate.url is null");
-			return resMsg;
-		}
 		try {
-			String resBody = HttpClientUtils.httpPost(coreUrl, reqBody);
+			String resBody = HttpClientUtils.httpPost(reqUrl, reqBody);
 			return JSON.parseObject(resBody, ResponseMessage.class);
 		}  catch (Exception e) {
 			e.printStackTrace();
