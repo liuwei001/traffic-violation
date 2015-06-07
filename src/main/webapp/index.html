@@ -59,26 +59,26 @@
                                         <div class="tab-content">
                                             <div role="tabpanel" class="tab-pane active" id="home">
                                                 <ul>
-                                                    <li code="BJ">北京</li>
-                                                    <li code="SH">上海</li>
-                                                    <li code="GD_GuangZhou">广州</li>
-                                                    <li code="GD_ShenZhen">深圳</li>
-                                                    <li code="JS_SuZhou">苏州</li>
-                                                    <li code="ZJ_HangZhou">杭州</li>
-                                                    <li code="JS_NanJing">南京</li>
-                                                    <li code="TJ">天津</li>
-                                                    <li code="SD_JiNan">济南</li>
-                                                    <li code="SD_QingDao">青岛</li>
-                                                    <li code="HUB_WuHan">武汉</li>
-                                                    <li code="HN_ChangSha">长沙</li>
-                                                    <li code="LN_ShenYang">沈阳</li>
-                                                    <li code="SC_ChengDu">成都</li>
-                                                    <li code="CQ">重庆</li>
-                                                    <li code="S3X_XiAn">西安</li>
-                                                    <li code="AH_HeFei">合肥</li>
-                                                    <li code="FJ_FuZhou">福州</li>
-                                                    <li code="JL_ChangChun">长春</li>
-                                                    <li code="HB_ShiJiaZhuang">石家庄</li>
+                                                    <li code="BJ" abbr="京">北京</li>
+                                                    <li code="SH" abbr="沪">上海</li>
+                                                    <li code="GD_GuangZhou" abbr="粤A">广州</li>
+                                                    <li code="GD_ShenZhen" abbr="粤B">深圳</li>
+                                                    <li code="JS_SuZhou" abbr="苏E">苏州</li>
+                                                    <li code="ZJ_HangZhou" abbr="浙A">杭州</li>
+                                                    <li code="JS_NanJing" abbr="苏A">南京</li>
+                                                    <li code="TJ" abbr="津">天津</li>
+                                                    <li code="SD_JiNan" abbr="鲁A">济南</li>
+                                                    <li code="SD_QingDao" abbr="鲁B">青岛</li>
+                                                    <li code="HUB_WuHan" abbr="鄂A">武汉</li>
+                                                    <li code="HN_ChangSha" abbr="湘A">长沙</li>
+                                                    <li code="LN_ShenYang" abbr="辽A">沈阳</li>
+                                                    <li code="SC_ChengDu" abbr="川A">成都</li>
+                                                    <li code="CQ" abbr="渝">重庆</li>
+                                                    <li code="S3X_XiAn" abbr="陕A">西安</li>
+                                                    <li code="AH_HeFei" abbr="皖A">合肥</li>
+                                                    <li code="FJ_FuZhou" abbr="闽A">福州</li>
+                                                    <li code="JL_ChangChun" abbr="吉A">长春</li>
+                                                    <li code="HB_ShiJiaZhuang" abbr="冀A">石家庄</li>
                                                 </ul>
                                             </div>
                                             <div role="tabpanel" class="tab-pane" id="ABCD">
@@ -245,7 +245,7 @@
     <script src="js/common/Utility.js"></script>
     <script src="js/controller/index.js"></script>
     <script id="list_template" type="text/x-jsrender">
-        <li code="{{:city_code}}">{{:city_name}}</li>
+        <li code="{{:city_code}}" abbr="{{:abbr}}">{{:city_name}}</li>
 	</script>
 </body>
 

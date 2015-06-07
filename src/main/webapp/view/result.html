@@ -108,21 +108,19 @@
                         <th>扣分</th>
                         <th>罚金</th>
                         <th>滞纳金</th>
-                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody>
-{{for weizhanglist}}
-                     <tr>
+				{{for weizhanglist}}
+                 <tr>
                     <td>{{:date}}</td>
-                 <td>{{:area}}</td>
-                 <td>{{:act}}</td>
-                 <td>{{:fen}}</td>
-                 <td>{{:money}}元</td>
-                 <td>0元</td>
-                 <td></td>
-                   </tr>
-{{/for}}
+                 	<td>{{:area}}</td>
+                 	<td>{{:act}}</td>
+                 	<td>{{:fen}}</td>
+                 	<td>{{:money}}元</td>
+                 	<td>0元</td>
+                 </tr>
+				{{/for}}
                 </tbody>
             </table>
            

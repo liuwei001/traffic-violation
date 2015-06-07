@@ -1,6 +1,7 @@
 package com.traffic.weizhang.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,9 @@ import com.traffic.common.utils.UUIDGenerator;
 import com.traffic.common.utils.http.HttpClientUtils;
 import com.traffic.weizhang.entity.City;
 import com.traffic.weizhang.entity.Province;
+import com.traffic.weizhang.entity.Result;
 import com.traffic.weizhang.entity.TQueryHistory;
+import com.traffic.weizhang.listener.SuppliersLoader;
 import com.traffic.weizhang.service.IQueryHistoryService;
 
 /**
@@ -55,9 +58,6 @@ public class WeiZhangController extends BaseController {
 	
 	@Value("${weizhang.citys.interface}")
 	private String citys_interface_url;
-	
-	@Value("${weizhang.query.interface}")
-	private String query_interface_url;
 	
 	/**
 	 * 查询城市
@@ -183,20 +183,52 @@ public class WeiZhangController extends BaseController {
 	@ResponseBody
 	public ResponseMessage queryList(HttpServletRequest request) {
 		JSONObject reqJsonBody = (JSONObject)request.getAttribute("reqBody");
-		if(StringUtils.isEmpty(query_interface_url)) {
+		/*if(StringUtils.isEmpty(query_interface_url)) {
 			logger.error("cfg.properties属性文件中没有配置违章查询接口地址,配置参数为：violation.query.interface");
 			return getResponseMsg_failed(ResultCodeEnum.SYSTEM_EXCEPTION);
-		}
+		}*/
 		try {
 			reqJsonBody.put("appid", appid);
 			
-			String city = reqJsonBody.getString("city");
-			String carno = reqJsonBody.getString("carno");
-			String sign = MD5Encrypt.encrypt(city + carno + appkey);
-			//设置签名参数
-			reqJsonBody.put("sign", sign);
+			List<Result> resultList = new ArrayList<Result>();
 			
-			String respBody = HttpClientUtils.httpPost_JSONObject(query_interface_url, reqJsonBody);
+			String cityStr = reqJsonBody.getString("city");
+			String[] citys = cityStr.split("、");
+			for(String city : citys) {
+				String interUrl = SuppliersLoader.getCity_SupplierUrl_Map().get(city);
+				if(StringUtils.isEmpty(interUrl)) {
+					interUrl = SuppliersLoader.getCity_SupplierUrl_Map().get("default");
+					if(logger.isDebugEnabled()) {
+						logger.debug("citycode : " + city + ",default url:" + interUrl);
+					}
+				} else {
+					if(logger.isDebugEnabled()) {
+						logger.debug("citycode : " + city + ",url:" + interUrl);
+					}
+				}
+				String carno = reqJsonBody.getString("carno");
+				if(logger.isDebugEnabled()) {
+					logger.debug("sign key : " + (city + carno + appkey));
+				}
+				String sign_md5 = MD5Encrypt.encrypt(city + carno + appkey,"UTF-8");
+				if(logger.isDebugEnabled()) {
+					logger.debug("sign md5 : " + sign_md5);
+				}
+				//设置签名参数
+				reqJsonBody.put("sign", sign_md5);
+				reqJsonBody.put("city", city);
+				
+				String respBody = HttpClientUtils.httpPost_JSONObject(interUrl, reqJsonBody);
+				JSONObject respObj = JSON.parseObject(respBody);
+				if("0".equals(respObj.getString("resultCode"))) {
+					List<Result> _resultList = JSONArray.parseArray(respObj.getString("result"), Result.class);
+					if(_resultList != null && _resultList.size() > 0) {
+						resultList.addAll(_resultList);
+					}
+				} else {
+					return JSON.parseObject(respBody, ResponseMessage.class);
+				}
+			}
 			
 			TQueryHistory queryHistory = JSON.toJavaObject(reqJsonBody, TQueryHistory.class);
 			queryHistory.setId(UUIDGenerator.getUUID());
@@ -205,7 +237,11 @@ public class WeiZhangController extends BaseController {
 			Thread saveHistoryThead = new QueryHistoryThread(queryHistory);
 			saveHistoryThead.start();
 			
-			return JSON.parseObject(respBody, ResponseMessage.class);
+			if(resultList.size() > 0) { //时间排序
+				Collections.sort(resultList);
+			}
+			
+			return getResponseMsg_success(resultList);
 		}catch(Exception ex) {
 			logger.error(ex.getMessage());
 			return getResponseMsg_failed(ResultCodeEnum.SYSTEM_EXCEPTION);
@@ -250,4 +286,5 @@ public class WeiZhangController extends BaseController {
 		}
 		
 	}
+	
 }

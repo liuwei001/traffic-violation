@@ -40,6 +40,23 @@ public class MD5Encrypt {
 
 		return encryptPasswd;
 	}
+	
+	public static String encrypt(String password,String encodingType) {
+
+		String encryptPasswd = "";
+
+		try {
+			MessageDigest alg = MessageDigest.getInstance("MD5");
+			alg.update(password.getBytes(encodingType));
+			byte[] digesta = alg.digest();
+
+			encryptPasswd = byte2hex(digesta);
+		} catch (Exception e) {
+			log.error(e);
+		}
+
+		return encryptPasswd;
+	}
 
 	private static String byte2hex(byte[] b) {
 
@@ -59,7 +76,8 @@ public class MD5Encrypt {
 
 	public static void main(String[] args) throws Exception {
 		System.out.println(MD5Encrypt
-				.encrypt("GD_ShenZhen粤BA804D9fdcd715d108a0bd51f481b3571ea2db"));
+				.encrypt("GD_ShenZhen粤BA804D9fdcd715d108a0bd51f481b3571ea2db","UTF-8"));
+		
 	}
 
 }

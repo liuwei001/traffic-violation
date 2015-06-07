@@ -99,6 +99,7 @@ $(function() {
 	        		$("#XYZ ul").html($("#list_template").render(data.xyz));
 	        		
 	        		var arr = [],
+	                arr_abbr = [],
 	        		arr_code = [],
 	                content = $('.list-content > .tab-content'),
 	                input = $('#city_text'),
@@ -113,22 +114,33 @@ $(function() {
 	                    var code = $(this).attr("code");
 	                    values = "";
 	                    codes = "";
+	                    var	abbr = $(this).attr("abbr");
+	                    
 	                    if ($(this).hasClass('active')) {
 	                        $(this).removeClass('active');
 	                        arr.splice($.inArray(value, arr), 1);
 	                        arr_code.splice($.inArray(code, arr_code), 1);
+	                        arr_abbr.splice($.inArray(abbr, arr_abbr), 1);
 	                    } else {
 	                        if (arr.length < 3) {
 	                            $(this).addClass('active');
 	                            arr.push(value);
 	                            arr_code.push(code);
+	                            arr_abbr.push(abbr);
 	                        }
 	                    }
 
 	                    values = arr.join(', ');
-						codes = arr_code.join(',');
+						codes = arr_code.join('、');
 	                    input.val(values);
 						$("#city").val(codes);
+						
+						if(arr_abbr.length > 0) {
+							var carno = $("#carno").val();
+							if(trim(carno) == "" || carno.length <= 2) {
+								$("#carno").val(arr_abbr[0]);
+							}
+						}
 	                }
 	            	
 	            	 input.add(btn).click(function() {

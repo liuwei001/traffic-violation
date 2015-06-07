@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+违章查询接口供应商配置
+ -->
+<suppliers>
+	
+	<supplier>
+		<description>默认供应商</description>
+		<url>http://testapi.zonghengche.com:8807/weizhang/query</url>
+	</supplier>
+	
+	<supplier>
+		<description>深圳--供应商</description>
+		<url>http://apis.zonghengche.com:8807/weizhang/query</url>
+		<cityCodes>
+			<city_code>GD_GuangZhou</city_code>
+			<city_code>GD_ShenZhen</city_code>
+		</cityCodes>
+	</supplier>
+	
+	<supplier>
+		<description>北京--供应商</description>
+		<url>http://apis.zonghengche.com:8807/weizhang/query</url>
+		<cityCodes>
+			<city_code>BJ</city_code>
+		</cityCodes>
+	</supplier>
+
+</suppliers>
