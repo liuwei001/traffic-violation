@@ -31,17 +31,17 @@
                         <span class="active">输入车辆信息<i class="icon"></i></span>
                         <span>查看违章结果<i class="icon"></i></span>
                     </div>
-                    <form class="form-horizontal" id="form" onsubmit="return false;">
-                     <input type="hidden" id="city" name="city" lang="param" >
-                     <input type="hidden" id="buyyear" name="buyyear" lang="param" >
-                     <input type="hidden" id="buyprice" name="buyprice" lang="param" >
-                     <input type="hidden" id="cartype" name="cartype" lang="param" >
-                     <input type="hidden" id="insurancemonth" name="insurancemonth" lang="param" />
+                    <form id="main-form" class="form-horizontal" name="main-form" onsubmit="return false;">
+                     <input type="hidden" id="cityText" name="cityText" >
+                    <!--  <input type="hidden" id="buyyear" name="buyyear" lang="param" >
+                     <input type="hidden" id="buyprice" name="buyprice" lang="param" > -->
+                     <input type="hidden" id="cartype" name="cartype" >
+                     <input type="hidden" id="insurancemonth" name="insurancemonth" />
                     
                         <div class="form-group list-container" >
                             <label class="col-xs-2 control-label">违章区域</label>
                             <div class="col-xs-6">
-                                <input id="city_text" type="text" class="form-control" readonly>
+                                <input id="city" type="text" class="form-control" name="city" readonly>
                                 <label class="icon arrow"></label>
                                 <div class="select-list" style="display: none">
                                     <!-- tab content-->
@@ -109,7 +109,7 @@
                         <div class="form-group">
                             <label class="col-xs-2 control-label">车牌号码</label>
                             <div class="col-xs-6">
-                                <input type="text" class="form-control" placeholder="请输入车牌号码" name="carno" id="carno" lang="param">
+                                <input type="text" class="form-control" placeholder="请输入车牌号码" name="num" id="carno" >
                             </div>
                             <div class="col-xs-4 control-label-big"><a href="./view/check-history.html">历史车辆信息</a></div>
                         </div>
@@ -147,7 +147,7 @@
                         <div class="form-group">
                             <label class="col-xs-2 control-label">发动机号</label>
                             <div class="col-xs-6">
-                                <input type="text" class="form-control" placeholder="请输入发动机号" name="engineno" id="engineno"  lang="param" >
+                                <input type="text" class="form-control" placeholder="请输入发动机号" name="engin" id="engineno"  >
                             </div>
                             <div class="col-xs-4 control-label ">
                                 <span class="icon help">
@@ -160,7 +160,7 @@
                         <div class="form-group">
                             <label class="col-xs-2 control-label">车 架 号</label>
                             <div class="col-xs-6">
-                                <input type="text" class="form-control" placeholder="请输入车架号" name="classno" id="classno"  lang="param" >
+                                <input type="text" class="form-control" placeholder="请输入车架号" name="frame" id="classno"   >
                             </div>
                             <div class="col-xs-4 control-label prompt">
                                 <span class="icon help">
@@ -174,7 +174,7 @@
                             <label class="col-xs-2 control-label">购车时间</label>
                             <div class="col-xs-6 two-field">
                                 <div class="select-content">
-                                    <input class="form-control select-input" type="text" value="" width="100%" readonly >
+                                    <input type="text" id="year" class="form-control select-input" name="year" readonly>
                                     <div class="select-input-list">
                                         <ul id="buyyear_li"></ul>
                                     </div>
@@ -205,7 +205,7 @@
                         <div class="form-group">
                             <label class="col-xs-2 control-label">手 机 号</label>
                             <div class="col-xs-6">
-                                <input type="text" class="form-control" placeholder="请输入手机号" id="mobile" name="mobile" lang="param" >
+                                <input type="text" class="form-control" placeholder="请输入手机号" id="mobile" name="phone" lang="param" >
                             </div>
                         </div>
                         <div class="form-group">

@@ -18,27 +18,13 @@ $(function() {
     	$("#buyyear_li").html(array_li.join(""));
     	$('.select-content').selectBox();
     	
-    	$("#form").submit(function() {
-    		if(checkInput()) {
-    			var param = "";
-        		$("input[lang=param]").each(function() {
-        			if($(this).val() != "") {
-        				if(param != "") {
-            				param += ";";
-            			}
-            			param = param + $(this).attr("name") + "," + $(this).val();
-        			}
-        		});
-        		window.location = "view/result.html?" + serializeMetaInfo(param);
-    		}
-    	});
     });
     
 	//初始化历史记录
    function  initQueryData(reqParam){
 	    var city  = reqParam.city;
-    	$("#city").val(city);
-    	$("#city_text").val($("#home ul").find("li[code="+ city +"]").html());
+    	$("#cityText").val(city);
+    	$("#city").val($("#home ul").find("li[code="+ city +"]").html());
     	
     	$("#carno").val(reqParam.carno);
     	
@@ -49,41 +35,6 @@ $(function() {
     	$("#engineno").val(reqParam.engineno);
     	$("#classno").val(reqParam.classno);
     	$("#mobile").val(reqParam.mobile)
-    }
-    
-    //检查输入
-    function checkInput() {
-    	
-    	if($("#city_text").val() == "") {
-			$("#city_text").focus();
-			return false;
-		}
-		
-		if(trim($("#carno").val()) == "") {
-			$("#carno").focus();
-			return false;
-		}
-		
-		if($("#cartype").val() == "") {
-			$("#cartype_text").focus();
-			return false;
-		}
-
-		if(trim($("#engineno").val()) == "") {
-			$("#engineno").focus();
-			return false;
-		}
-		
-		if(trim($("#classno").val()) == "") {
-			$("#classno").focus();
-			return false;
-		}
-		
-		if(trim($("#mobile").val()) == "") {
-			$("#mobile").focus();
-			return false;
-		}
-		return true;
     }
     
     //初始化城市信息
@@ -102,7 +53,7 @@ $(function() {
 	                arr_abbr = [],
 	        		arr_code = [],
 	                content = $('.list-content > .tab-content'),
-	                input = $('#city_text'),
+	                input = $('#city'),
 	                btn = $('#hide-list'),
 	                item = content.find('li'),
 	                values = "",
@@ -133,7 +84,7 @@ $(function() {
 	                    values = arr.join(', ');
 						codes = arr_code.join('、');
 	                    input.val(values);
-						$("#city").val(codes);
+						$("#cityText").val(codes);
 						
 						if(arr_abbr.length > 0) {
 							var carno = $("#carno").val();
