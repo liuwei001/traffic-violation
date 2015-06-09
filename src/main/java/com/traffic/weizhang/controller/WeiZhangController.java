@@ -194,29 +194,34 @@ public class WeiZhangController extends BaseController {
 			
 			String cityStr = reqJsonBody.getString("city");
 			String[] citys = cityStr.split("、");
-			for(String city : citys) {
-				String interUrl = SuppliersLoader.getCity_SupplierUrl_Map().get(city);
-				if(StringUtils.isEmpty(interUrl)) {
-					interUrl = SuppliersLoader.getCity_SupplierUrl_Map().get("default");
+			for(String citycode : citys) {
+				String interUrl = "";//供应商接口url
+				Map<String,String[]> supplierMap = SuppliersLoader.getCity_Supplier_Map();
+				if(!supplierMap.containsKey(citycode)) {//未配置指定的城市供应商，则通过默认供应商查询
+					String[] serpplierInfo = supplierMap.get("default");
+					interUrl = serpplierInfo[1];
 					if(logger.isDebugEnabled()) {
-						logger.debug("citycode : " + city + ",default url:" + interUrl);
+						logger.debug("citycode : " + citycode + ",default url:" + interUrl);
 					}
 				} else {
+					String[] serpplierInfo = supplierMap.get(citycode);
+					citycode = serpplierInfo[0];
+					interUrl = serpplierInfo[1];
 					if(logger.isDebugEnabled()) {
-						logger.debug("citycode : " + city + ",url:" + interUrl);
+						logger.debug("citycode : " + citycode + ",url:" + interUrl);
 					}
 				}
 				String carno = reqJsonBody.getString("carno");
 				if(logger.isDebugEnabled()) {
-					logger.debug("sign key : " + (city + carno + appkey));
+					logger.debug("sign key : " + (citycode + carno + appkey));
 				}
-				String sign_md5 = MD5Encrypt.encrypt(city + carno + appkey,"UTF-8");
+				String sign_md5 = MD5Encrypt.encrypt(citycode + carno + appkey,"UTF-8");
 				if(logger.isDebugEnabled()) {
 					logger.debug("sign md5 : " + sign_md5);
 				}
 				//设置签名参数
 				reqJsonBody.put("sign", sign_md5);
-				reqJsonBody.put("city", city);
+				reqJsonBody.put("city", citycode);
 				
 				String respBody = HttpClientUtils.httpPost_JSONObject(interUrl, reqJsonBody);
 				JSONObject respObj = JSON.parseObject(respBody);

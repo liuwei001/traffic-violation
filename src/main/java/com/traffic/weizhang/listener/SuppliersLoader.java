@@ -23,13 +23,13 @@ public class SuppliersLoader {
 	
 	private static final Logger logger = Logger.getLogger(SuppliersLoader.class);
 	
-	private static Map<String,String> city_SupplierUrl_Map = new HashMap<String, String>();
+	private static Map<String,String[]> city_Supplier_Map = new HashMap<String, String[]>();
 
 	public static void init() {
 		
 		logger.info("初始化加载供应商配置.....start.");
 		
-		InputStream inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("weizhang-supplier.xml");
+		InputStream inStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("supplier.xml");
 		Digester digester = new Digester();
 		digester.addObjectCreate("suppliers", Suppliers.class);
 		digester.addObjectCreate("suppliers/supplier", Supplier.class);
@@ -39,10 +39,11 @@ public class SuppliersLoader {
 		digester.addBeanPropertySetter("suppliers/supplier/description", "description");  
 		digester.addBeanPropertySetter("suppliers/supplier/url", "url"); 
 		
-		digester.addObjectCreate("suppliers/supplier/cityCodes", CityCode.class);
-		digester.addSetProperties("suppliers/supplier/cityCodes");
+		digester.addObjectCreate("suppliers/supplier/cityCodes/city_code", CityCode.class);
+		digester.addSetProperties("suppliers/supplier/cityCodes/city_code"); 
 		digester.addBeanPropertySetter("suppliers/supplier/cityCodes/city_code", "citycode"); 
-		digester.addSetNext("suppliers/supplier/cityCodes", "addCityCode");
+		digester.addBeanPropertySetter("suppliers/supplier/cityCodes/city_code/targetCode", "targetCode"); 
+		digester.addSetNext("suppliers/supplier/cityCodes/city_code", "addCityCode");
 		
 		
 		try {
@@ -52,10 +53,10 @@ public class SuppliersLoader {
 				List<CityCode> cityCodeList = supplier.getCityCodeList();
 				if(cityCodeList != null && cityCodeList.size() > 0) {
 					for(CityCode cityCode : cityCodeList) {
-						city_SupplierUrl_Map.put(cityCode.getCitycode(), supplier.getUrl());
+						city_Supplier_Map.put(cityCode.getCitycode(), new String[]{cityCode.getTargetCode() == null?cityCode.getCitycode():cityCode.getTargetCode(),supplier.getUrl()});
 					}
 				} else { //默认供应商
-					city_SupplierUrl_Map.put("default", supplier.getUrl());
+					city_Supplier_Map.put("default",new String[]{"", supplier.getUrl()});
 				}
 			}
 			
@@ -67,12 +68,13 @@ public class SuppliersLoader {
 		}
 	}
 
-	public static Map<String, String> getCity_SupplierUrl_Map() {
-		return city_SupplierUrl_Map;
+	public static Map<String, String[]> getCity_Supplier_Map() {
+		return city_Supplier_Map;
 	}
 
-	public static void setCity_SupplierUrl_Map(
-			Map<String, String> city_SupplierUrl_Map) {
-		SuppliersLoader.city_SupplierUrl_Map = city_SupplierUrl_Map;
+	public static void setCity_Supplier_Map(Map<String, String[]> city_Supplier_Map) {
+		SuppliersLoader.city_Supplier_Map = city_Supplier_Map;
 	}
+
+
 }
