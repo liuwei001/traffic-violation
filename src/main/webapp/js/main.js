@@ -1642,6 +1642,15 @@ $(function() {
     $('#sent-msg').click(function() {
         var t = $(this);
         time(t);
+        
+        syncData("validatemsg/send","GET",null,function(success,data){
+        	if(success == true){
+        		alert("【测试】发送的验证码为：" + data);
+        	} else {
+        		alert("发送验证码失败");
+        	}
+        });
+        
     });
 
     addDefault('#subscribe');
@@ -1658,22 +1667,33 @@ $(function() {
 
     $.validator.setDefaults({
         submitHandler: function(form) {
-            var param = [];
-     		var city = "city," + $("#cityText").val();
-     		var carType = "carType,02";
-     		var carno = "carno," + $("#carno").val();
-     		var engineno = "engineno," + $("#engineno").val();
-     		var classno = "classno," + $("#classno").val();
-     		var mobile = "mobile," + $("#mobile").val();
-     		
-     		param.push(city);
-     		param.push(carType);
-     		param.push(carno);
-     		param.push(engineno);
-     		param.push(classno);
-     		param.push(mobile);
-     		
-     		window.location = "view/result.html?" + serializeMetaInfo(param.join(";"));
+        	syncData("validatemsg/check/" + $("#code").val(),"GET",null,function(success,data){
+            	if(success == true){
+            		var param = [];
+               		var city = "city," + $("#cityText").val();
+               		var carType = "carType,02";
+               		var carno = "carno," + $("#carno").val();
+               		var engineno = "engineno," + $("#engineno").val();
+               		var classno = "classno," + $("#classno").val();
+               		var mobile = "mobile," + $("#mobile").val();
+               		
+               		param.push(city);
+               		param.push(carType);
+               		param.push(carno);
+               		param.push(engineno);
+               		param.push(classno);
+               		param.push(mobile);
+               		
+               		window.location = "view/result.html?" + serializeMetaInfo(param.join(";"));
+            	}else {
+            		if(data.resultCode == "1100001") {
+            			alert("验证码失效");
+            		} else if(data.resultCode == "1100002") {
+            			alert("验证码错误");
+            		}
+            	}
+            });
+        	
         }
     });
 

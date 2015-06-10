@@ -26,7 +26,7 @@ var syncData = function(api,type,params,callback,async){
             if(parseInt(data.resultCode) == "0"){ //成功
 	            callback(true,data.result);
             }else{
-                callback(false,data.resultMsg);
+                callback(false,data);
             }
 		},
 		error:function (xhr, textStatus, errorThrown) {
