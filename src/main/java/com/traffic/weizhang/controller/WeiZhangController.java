@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -67,28 +68,14 @@ public class WeiZhangController extends BaseController {
 	@ResponseBody
 	public ResponseMessage cityList(HttpServletRequest request) {
 		String reflushCityList = request.getParameter("reflush"); //当reflush参数为1时，重新查询接口，否则查询内存缓存
-		if(citysMap.keySet().size() == 0 || reflushCityList == "1") {
+		if(citysMap == null || citysMap.keySet().size() == 0 || reflushCityList == "1") {
 			if(StringUtils.isEmpty(citys_interface_url)) {
 				logger.error("cfg.properties属性文件中没有配置城市查询接口地址,配置参数为：weizhang.citys.interface");
 				return getResponseMsg_failed(ResultCodeEnum.SYSTEM_EXCEPTION);
 			}
 			
-			logger.info("start to query citylist,reqUrl:" + citys_interface_url);
-			
 			String respBody = HttpClientUtils.httpGet(citys_interface_url);
-			
-			List<City> abcdList = new ArrayList<City>();
-			List<City> efghList = new ArrayList<City>();
-			List<City> ijklmList = new ArrayList<City>();
-			List<City> nopqrList = new ArrayList<City>();
-			List<City> stuvwList = new ArrayList<City>();
-			List<City> xyzList = new ArrayList<City>();
-			String abcd_text = "ABCD";
-			String efgh_text = "EFGH";
-			String ijklm_text = "IJKLM";
-			String nopqr_text = "NOPQR";
-			String stuvw_text = "STUVW";
-			String xyz_text = "XYZ";
+
 			try {
 				if(StringUtils.isNotBlank(respBody)) {
 					ResponseMessage respMsg = JSON.parseObject(respBody, ResponseMessage.class);
@@ -107,19 +94,15 @@ public class WeiZhangController extends BaseController {
 										} else {
 											start_char = city_full_code.charAt(0);
 										}
-										if(abcd_text.indexOf(start_char) > -1) {
-											abcdList.add(city);
-										} else if(efgh_text.indexOf(start_char) > -1) {
-											efghList.add(city);
-										} else if(ijklm_text.indexOf(start_char) > -1) {
-											ijklmList.add(city);
-										} else if(nopqr_text.indexOf(start_char) > -1) {
-											nopqrList.add(city);
-										} else if(stuvw_text.indexOf(start_char) > -1) {
-											stuvwList.add(city);
-										} else if(xyz_text.indexOf(start_char) > -1) {
-											xyzList.add(city);
+										
+										if(citysMap.containsKey(String.valueOf(start_char))) {
+											citysMap.get(String.valueOf(start_char)).add(city);
+										} else {
+											List<City> cityList = new ArrayList<City>();
+											cityList.add(city);
+											citysMap.put(String.valueOf(start_char), cityList);
 										}
+										
 									}
 								}
 							}
@@ -131,12 +114,6 @@ public class WeiZhangController extends BaseController {
 				return getResponseMsg_failed(ResultCodeEnum.SYSTEM_EXCEPTION);
 			}
 			
-			citysMap.put("abcd", abcdList);
-			citysMap.put("efgh", efghList);
-			citysMap.put("ijklm", ijklmList);
-			citysMap.put("nopqr", nopqrList);
-			citysMap.put("stuvw", stuvwList);
-			citysMap.put("xyz", xyzList);
 		} 
 		
 		ResponseMessage resMsg = new ResponseMessage();
@@ -242,10 +219,17 @@ public class WeiZhangController extends BaseController {
 			Thread saveHistoryThead = new QueryHistoryThread(queryHistory);
 			saveHistoryThead.start();
 			
-			if(resultList.size() > 0) { //时间排序
+			if(resultList.size() > 0) { 
+				
+				//通过hashset去重复
+				HashSet<Result> h = new HashSet<Result>(resultList);  
+				resultList.clear();  
+				resultList.addAll(h);  
+				
+				//时间排序
 				Collections.sort(resultList);
 			}
-			
+		      
 			return getResponseMsg_success(resultList);
 		}catch(Exception ex) {
 			logger.error(ex.getMessage());
@@ -291,5 +275,4 @@ public class WeiZhangController extends BaseController {
 		}
 		
 	}
-	
 }

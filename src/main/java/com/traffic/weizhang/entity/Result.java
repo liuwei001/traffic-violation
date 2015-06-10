@@ -5,21 +5,21 @@ import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class Result implements Serializable , Comparable<Result>{
+public class Result implements Serializable, Comparable<Result> {
 
 	private static final long serialVersionUID = 1L;
 
 	private String code;
-	
+
 	private String fen;
-	
+
 	private float money;
-	
+
 	private String area;
-	
+
 	private String act;
-	
-	@JsonFormat(pattern = "yyyy-MM-dd HH-mm-ss")
+
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date date;
 
 	public String getCode() {
@@ -68,6 +68,20 @@ public class Result implements Serializable , Comparable<Result>{
 
 	public void setDate(Date date) {
 		this.date = date;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		Result r = (Result) obj;
+		return code.equals(r.code) && fen.equals(r.fen) && (money == r.money)
+				&& area.equals(r.area) && act.equals(r.act) && date.equals(r.date);
+	}
+
+	@Override
+	public int hashCode() {
+		String str = code + fen + money + area + act + date;
+		return str.hashCode();
 	}
 	
 	@Override

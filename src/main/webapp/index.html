@@ -82,22 +82,16 @@
                                                 </ul>
                                             </div>
                                             <div role="tabpanel" class="tab-pane" id="ABCD">
-                                                <ul></ul>
                                             </div>
                                             <div role="tabpanel" class="tab-pane" id="EFGH">
-                                            	<ul></ul>
                                             </div>
                                             <div role="tabpanel" class="tab-pane" id="IJKLM">
-                                            	<ul></ul>
                                             </div>
                                             <div role="tabpanel" class="tab-pane" id="NOPQR">
-                                            	<ul></ul>
                                             </div>
                                             <div role="tabpanel" class="tab-pane" id="STUVW">
-                                            	<ul></ul>
                                             </div>
                                             <div role="tabpanel" class="tab-pane" id="XYZ">
-                                            	<ul></ul>
                                             </div>
                                         </div>
                                         <!-- tab content end-->
@@ -113,7 +107,7 @@
                             </div>
                             <div class="col-xs-4 control-label-big"><a href="./view/check-history.html">历史车辆信息</a></div>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label class="col-xs-2 control-label">车牌类型</label>
                             <div class="col-xs-6 ">
                                 <div class="select-content">
@@ -143,7 +137,7 @@
                                     <label class="icon arrow first" for="num"></label>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group">
                             <label class="col-xs-2 control-label">发动机号</label>
                             <div class="col-xs-6">
@@ -245,7 +239,14 @@
     <script src="js/common/Utility.js"></script>
     <script src="js/controller/index.js"></script>
     <script id="list_template" type="text/x-jsrender">
-        <li code="{{:city_code}}" abbr="{{:abbr}}">{{:city_name}}</li>
+	<div class="tab-list">
+         <div>{{:prefix}}</div>
+         <ul>
+         {{for citylist}}
+             <li code="{{:city_code}}" abbr="{{:abbr}}">{{:city_name}}</li>
+         {{/for}}
+         </ul>
+     </div>
 	</script>
 </body>
 

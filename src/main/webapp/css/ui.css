@@ -196,7 +196,7 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "STHeiti", "Microsoft YaHei";
   font-size: 14px;
   line-height: 1.42857143;
   color: #333333;
@@ -1924,16 +1924,27 @@ input.has-error::-webkit-input-placeholder {
   height: 108px;
   overflow-y: scroll;
 }
+.select-list .tab-content .tab-list {
+  margin-bottom: 10px;
+}
+.select-list .tab-content .tab-list div {
+  color: #ff6633;
+  float: left;
+  padding: 3px 0;
+  width: 4%;
+}
 .select-list .tab-content ul {
   padding: 0;
   margin: 0;
+  width: 96%;
+  overflow: hidden;
 }
 .select-list .tab-content ul li {
   list-style: none;
   width: 20%;
   float: left;
   text-align: center;
-  padding: 5px 0;
+  padding: 3px 0;
   cursor: pointer;
   color: #777777;
 }
@@ -2036,6 +2047,9 @@ input.has-error::-webkit-input-placeholder {
   padding-left: 5px;
   padding-right: 5px;
 }
+.main-table td {
+  max-width: 250px;
+}
 .table-gray {
   border: 1px solid #dddddd;
 }
@@ -2112,6 +2126,11 @@ input.has-error::-webkit-input-placeholder {
 .select-input-list > ul > li:hover {
   background: #ff6633;
   color: #fff;
+}
+#engin,
+#frame,
+#num {
+  text-transform: uppercase;
 }
 .fade {
   opacity: 1;

@@ -1,10 +1,10 @@
 $(function() {
-    	var myDate = new Date();
+    	/*var myDate = new Date();
     	var currYear = myDate.getFullYear();
     	var array_li = [];
     	for(var i = 1993; i <= currYear; i++ ) {
     		array_li.push("<li>" + i + "年</li>");
-    	}
+    	}*/
     	
     	//初始化城市
     	initCitys() ;
@@ -15,8 +15,8 @@ $(function() {
     	}
     	
     	//设置购车时间年份 从1993年开始
-    	$("#buyyear_li").html(array_li.join(""));
-    	$('.select-content').selectBox();
+    	/*$("#buyyear_li").html(array_li.join(""));
+    	$('.select-content').selectBox();*/
     	
     });
     
@@ -28,9 +28,9 @@ $(function() {
     	
     	$("#carno").val(reqParam.carno);
     	
-    	var cartype = reqParam.cartype;
+    	/*var cartype = reqParam.cartype;
     	$("#cartype").val(cartype);
-    	$("#cartype_text").val($("#cartype_"+cartype).html());
+    	$("#cartype_text").val($("#cartype_"+cartype).html());*/
     	
     	$("#engineno").val(reqParam.engineno);
     	$("#classno").val(reqParam.classno);
@@ -42,12 +42,47 @@ $(function() {
     	syncData("citylist","GET",null,function(success,data){
 	        if(success == true){
 	        	if(data != null) {
-	        		$("#ABCD ul").html($("#list_template").render(data.abcd));
-	        		$("#EFGH ul").html($("#list_template").render(data.efgh));
-	        		$("#IJKLM ul").html($("#list_template").render(data.ijklm));
-	        		$("#NOPQR ul").html($("#list_template").render(data.nopqr));
-	        		$("#STUVW ul").html($("#list_template").render(data.stuvw));
-	        		$("#XYZ ul").html($("#list_template").render(data.xyz));
+	        		
+	        		var abcd = [];
+	        		var efgh = [];
+	        		var ijklm = [];
+	        		var nopqr = [];
+	        		var stuvw = [];
+	        		var xyz = [];
+	        		var str = "ABCDEFGHIJKLMOPQRSTUVWXYZ";
+	        		for(var i = 0;i < str.length; i++) {
+	        			var prefix = str.charAt(i);
+	        			if(data[prefix] == null) continue;
+	        			var obj = {
+	        					prefix:prefix,
+	        					citylist:data[prefix]
+	        			}
+	        			if("ABCD".indexOf(prefix) > -1) {
+	        				abcd.push(obj);
+	        			}
+	        			if("EFGH".indexOf(prefix) > -1) {
+	        				efgh.push(obj);
+	        			}
+	        			if("IJKLM".indexOf(prefix) > -1) {
+	        				ijklm.push(obj);
+	        			}
+	        			if("NOPQR".indexOf(prefix) > -1) {
+	        				nopqr.push(obj);
+	        			}
+	        			if("STUVW".indexOf(prefix) > -1) {
+	        				stuvw.push(obj);
+	        			}
+	        			if("XYZ".indexOf(prefix) > -1) {
+	        				xyz.push(obj);
+	        			}
+	        		}
+	        		
+	        		$("#ABCD").html($("#list_template").render(abcd));
+	        		$("#EFGH").html($("#list_template").render(efgh));
+	        		$("#IJKLM").html($("#list_template").render(ijklm));
+	        		$("#NOPQR").html($("#list_template").render(nopqr));
+	        		$("#STUVW").html($("#list_template").render(stuvw));
+	        		$("#XYZ").html($("#list_template").render(xyz));
 	        		
 	        		var arr = [],
 	                arr_abbr = [],
@@ -105,6 +140,6 @@ $(function() {
     }
     
     //选择车辆类型
-    function selectCatType(cartype) {
+   /* function selectCatType(cartype) {
     	$("#cartype").val(cartype);
-    }
+    }*/

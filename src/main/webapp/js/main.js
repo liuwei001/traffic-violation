@@ -1660,7 +1660,7 @@ $(function() {
         submitHandler: function(form) {
             var param = [];
      		var city = "city," + $("#cityText").val();
-     		var carType = "carType," + $("#carType").val();
+     		var carType = "carType,02";
      		var carno = "carno," + $("#carno").val();
      		var engineno = "engineno," + $("#engineno").val();
      		var classno = "classno," + $("#classno").val();
