@@ -1672,9 +1672,9 @@ $(function() {
             		var param = [];
                		var city = "city," + $("#cityText").val();
                		var carType = "carType,02";
-               		var carno = "carno," + $("#carno").val();
-               		var engineno = "engineno," + $("#engineno").val();
-               		var classno = "classno," + $("#classno").val();
+               		var carno = "carno," + $("#num").val();
+               		var engineno = "engineno," + $("#engin").val();
+               		var classno = "classno," + $("#frame").val();
                		var mobile = "mobile," + $("#mobile").val();
                		
                		param.push(city);

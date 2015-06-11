@@ -26,14 +26,14 @@ $(function() {
     	$("#cityText").val(city);
     	$("#city").val($("#home ul").find("li[code="+ city +"]").html());
     	
-    	$("#carno").val(reqParam.carno);
+    	$("#num").val(reqParam.carno);
     	
     	/*var cartype = reqParam.cartype;
     	$("#cartype").val(cartype);
     	$("#cartype_text").val($("#cartype_"+cartype).html());*/
     	
-    	$("#engineno").val(reqParam.engineno);
-    	$("#classno").val(reqParam.classno);
+    	$("#engin").val(reqParam.engineno);
+    	$("#frame").val(reqParam.classno);
     	$("#mobile").val(reqParam.mobile)
     }
     
