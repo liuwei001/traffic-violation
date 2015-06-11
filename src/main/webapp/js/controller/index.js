@@ -122,9 +122,9 @@ $(function() {
 						$("#cityText").val(codes);
 						
 						if(arr_abbr.length > 0) {
-							var carno = $("#carno").val();
+							var carno = $("#num").val();
 							if(trim(carno) == "" || carno.length <= 2) {
-								$("#carno").val(arr_abbr[0]);
+								$("#num").val(arr_abbr[0]);
 							}
 						}
 	                }
