@@ -1687,9 +1687,9 @@ $(function() {
                		window.location = "view/result.html?" + serializeMetaInfo(param.join(";"));
             	}else {
             		if(data.resultCode == "1100001") {
-            			alert("验证码失效");
+            			$("#code").addClass("has-error").after("<span class=\"has-error\">验证码失效</span>")
             		} else if(data.resultCode == "1100002") {
-            			alert("验证码错误");
+            			$("#code").addClass("has-error").after("<span class=\"has-error\">验证码错误</span>")
             		}
             	}
             });
@@ -1727,8 +1727,7 @@ $(function() {
         messages: {
             city: "",
             year: "",
-            month: "",
-            code: ""
+            month: ""
         },
         errorClass: 'has-error',
         errorElement: "span",

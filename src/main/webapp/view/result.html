@@ -135,11 +135,23 @@
 	        		weizhangdata.weizhanglist = data;
 	        		$("#weizhang_info").html($("#list_template").render(weizhangdata));
 	        	} else {
-	        		$("#weizhang_info").html("<div class='no-result'><h2 class='text-primary'>恭喜，</h2><p>该车辆暂无违章记录</p></div>");
+	        		var date = new Date();
+	        	    var seperator1 = "-";
+	        	    var seperator2 = ":";
+	        	    var month = date.getMonth() + 1;
+	        	    var strDate = date.getDate();
+	        	    if (month >= 1 && month <= 9) {
+	        	        month = "0" + month;
+	        	    }
+	        	    if (strDate >= 0 && strDate <= 9) {
+	        	        strDate = "0" + strDate;
+	        	    }
+	        	    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate + " 00:00:00";
+	        		$("#weizhang_info").html("<div class='no-result'> <p><span class=\"rs-icon\"></span><strong class=\"text-primary\">恭喜,</strong> 该车辆暂无违章记录，数据更新至"+ currentdate +"</p></div>");
 	        	}
 	            
 	        }else{
-	        	$("#weizhang_info").html("<div class='no-result'><span style='font-size:12px;color:red'>系统请求出错,"+ data +"</span></div>");
+	        	$("#weizhang_info").html("<div class='no-result'><span style='font-size:12px;color:red'>系统请求出错："+ data.resultMsg +"</span></div>");
 	        }
 	    });
     });

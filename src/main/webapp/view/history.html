@@ -45,7 +45,7 @@
         <img class="img-responsive" src="../img/footer.jpg" alt="">
     </div>
     <script>
-    window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')
+    window.jQuery || document.write('<script src="../js/vendor/jquery-1.9.0.min.js"><\/script>')
     </script>
     <script src="../js/main.js"></script>
     <script src="../js/common/common.js"></script>
@@ -80,7 +80,7 @@
 	        	}
 	            
 	        }else{
-	        	$(".result").html("<div class='no-result'><span style='font-size:12px;color:red'>系统请求出错,"+ data +"</span></div>");
+	        	$(".result").html("<div class='no-result'><span style='font-size:12px;color:red'>系统请求出错,"+ data.resultMsg +"</span></div>");
 	        }
 	    });
     });
