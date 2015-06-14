@@ -205,11 +205,11 @@
                         <div class="form-group">
                             <label class="col-xs-2 control-label">验证码</label>
                             <div class="col-xs-3 n-pdr">
-                                <input type="text" id="code" class="form-control" name="code" placeholder="请输入手机验证动态密码">
+                                <input type="text" id="code" class="form-control" name="code" placeholder="请输入手机验证码">
                                 <!-- <span class="has-error">验证码错误</span> -->
                             </div>
                             <div class="col-xs-3">
-                              <a id="sent-msg" class="btn btn-secondary btn-block">发送短信动态密码</a>
+                              <a id="sent-msg" class="btn btn-secondary btn-block">免费获取验证码</a>
                             </div>
                         </div>
                         <div class="form-group">
@@ -236,19 +236,19 @@
     window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')
     </script>
     <script src="js/main.js"></script>
+    <script src="js/controller/index.js"></script>
     <script src="js/vendor/jsrender.min.js"></script>
     <script src="js/common/common.js"></script>
     <script src="js/common/Utility.js"></script>
-    <script src="js/controller/index.js"></script>
     <script id="list_template" type="text/x-jsrender">
-	<div class="tab-list">
+	  <div class="tab-list">
          <div>{{:prefix}}</div>
          <ul>
          {{for citylist}}
              <li code="{{:city_code}}" abbr="{{:abbr}}">{{:city_name}}</li>
          {{/for}}
          </ul>
-     </div>
+      </div>
 	</script>
 </body>
 

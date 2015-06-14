@@ -57,29 +57,32 @@
         <div class="light-box"></div>
         <div class="message">
             <h5>免费订阅<button class="close"><span aria-hidden="true">&times;</span></button></h5>
-            <div class="form-horizontal info">
+            <form id="main-form" name="main-form" onsubmit="return false;">
+            <div class="form-horizontal info" id="form_div">
                 <div class="form-group">
                     <label class="col-xs-2 control-label">手机号</label>
                     <div class="col-xs-10">
-                        <input type="text" class="form-control">
+                         <input type="text" class="form-control" placeholder="请输入手机号" id="mobile" name="phone" lang="param" >
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-xs-2 control-label">手机号</label>
-                    <div class="col-xs-7">
-                        <input type="text" class="form-control">
+                    <label class="col-xs-2 control-label">验证码</label>
+                    <div class="col-xs-5">
+                        <input type="text" id="code" class="form-control" name="code" placeholder="请输入验证码">
                     </div>
-                    <div class="col-xs-3">
-                        <span class="btn btn-secondary btn-block">免费获取</span>
+                    <div class="col-xs-5">
+                        <span id="sent-msg"  class="btn btn-secondary btn-block">免费获取验证码</span>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-xs-offset-3 col-xs-6">
-                        <a href="info.html" id="subscribe" class="btn btn-primary btn-lg btn-block">免费订阅</a>
+                        <!-- <a href="info.html" id="subscribe" class="btn btn-primary btn-lg btn-block">免费订阅</a> -->
+                         <input type="submit" value="免费订阅" class="btn btn-primary btn-lg btn-block">
                     </div>
                 </div>
             </div>
-            <div class="info hide">
+            </form>
+            <div class="info hide" id="info_div">
                 <h4 class="text-primary">恭喜，</h4>
                 <p>您已成功订阅平安违章查询服务，将定期将粤BD8888违章信息发送至您预留的1343338888手机中。</p>
             </div>
@@ -93,9 +96,9 @@
     </script>
     <!-- <script src="js/tab.js"></script> -->
     <script src="../js/main.js"></script>
+    <script src="../js/controller/result.js"></script>
     <script src="../js/common/common.js"></script>
     <script src="../js/common/Utility.js"></script>
-    
 	<script src="../js/vendor/jsrender.min.js"></script>
     <script id="list_template" type="text/x-jsrender">
            <table class="table table-bordered main-table">

@@ -26,6 +26,8 @@ public class ValidateMsgController extends BaseController {
 	
 	private final Logger logger = Logger.getLogger(ValidateMsgController.class);
 	
+	private final String VALIDATE_CODE = "vcode_info";
+	
 	/**
 	 * 短信验证码失效时间 单位:分钟
 	 */
@@ -42,7 +44,7 @@ public class ValidateMsgController extends BaseController {
 		long validatecode = (int)((Math.random()*9+1)*100000);
 		logger.info("validatecode = " + validatecode);
 		Long[] vcode_info = new Long[]{validatecode,new Date().getTime()};
-		request.getSession().setAttribute("vcode_info", vcode_info);
+		request.getSession().setAttribute(VALIDATE_CODE, vcode_info);
 		return getResponseMsg_success(validatecode);
 	}
 	
@@ -53,7 +55,7 @@ public class ValidateMsgController extends BaseController {
 	 */
 	@RequestMapping( value = "/check/{validatecode}",method = RequestMethod.GET)
 	public ResponseMessage checkValidateMsg(HttpServletRequest request,@PathVariable long validatecode) {
-		Long[] vcode_info = (Long[])request.getSession().getAttribute("vcode_info");
+		Long[] vcode_info = (Long[])request.getSession().getAttribute(VALIDATE_CODE);
 		if(vcode_info == null) {
 			ResponseMessage resMsg = new ResponseMessage();
 			resMsg.setResultCode("1100001");

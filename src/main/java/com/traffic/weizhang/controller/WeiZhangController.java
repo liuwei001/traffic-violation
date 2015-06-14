@@ -276,12 +276,4 @@ public class WeiZhangController extends BaseController {
 		
 	}
 	
-	public static void main(String[] args) throws Exception {
-		System.out.println("start......");
-		long time = new Date().getTime();
-		Thread.sleep(1*60*1000);
-		long end = new Date().getTime();
-		System.out.println("end........");
-		System.out.println(end - time);
-	}
 }
