@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.traffic.common.base.BaseController;
+import com.traffic.common.constants.Constants;
 import com.traffic.common.message.ResponseMessage;
 
 /**
@@ -25,8 +26,6 @@ import com.traffic.common.message.ResponseMessage;
 public class ValidateMsgController extends BaseController {
 	
 	private final Logger logger = Logger.getLogger(ValidateMsgController.class);
-	
-	private final String VALIDATE_CODE = "vcode_info";
 	
 	/**
 	 * 短信验证码失效时间 单位:分钟
@@ -44,7 +43,7 @@ public class ValidateMsgController extends BaseController {
 		long validatecode = (int)((Math.random()*9+1)*100000);
 		logger.info("validatecode = " + validatecode);
 		Long[] vcode_info = new Long[]{validatecode,new Date().getTime()};
-		request.getSession().setAttribute(VALIDATE_CODE, vcode_info);
+		request.getSession().setAttribute(Constants.VALIDATE_CODE, vcode_info);
 		return getResponseMsg_success(validatecode);
 	}
 	
@@ -55,7 +54,7 @@ public class ValidateMsgController extends BaseController {
 	 */
 	@RequestMapping( value = "/check/{validatecode}",method = RequestMethod.GET)
 	public ResponseMessage checkValidateMsg(HttpServletRequest request,@PathVariable long validatecode) {
-		Long[] vcode_info = (Long[])request.getSession().getAttribute(VALIDATE_CODE);
+		Long[] vcode_info = (Long[])request.getSession().getAttribute(Constants.VALIDATE_CODE);
 		if(vcode_info == null) {
 			ResponseMessage resMsg = new ResponseMessage();
 			resMsg.setResultCode("1100001");

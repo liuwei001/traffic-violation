@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.traffic.common.base.BaseController;
+import com.traffic.common.constants.Constants;
 import com.traffic.common.enumcode.ResultCodeEnum;
 import com.traffic.common.exception.DalException;
 import com.traffic.common.message.ResponseMessage;
@@ -66,6 +67,10 @@ public class SubScribeController extends BaseController {
 			e.printStackTrace();
 			return getResponseMsg_failed(ResultCodeEnum.SYSTEM_EXCEPTION);
 		}
+		
+		//移除验证码session
+		request.getSession().removeAttribute(Constants.VALIDATE_CODE);
+		
 		return getResponseMsg_success(null);
 	}
 }

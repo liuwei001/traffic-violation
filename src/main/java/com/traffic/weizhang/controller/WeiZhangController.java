@@ -23,6 +23,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.traffic.common.base.BaseController;
+import com.traffic.common.constants.Constants;
 import com.traffic.common.enumcode.ResultCodeEnum;
 import com.traffic.common.exception.DalException;
 import com.traffic.common.message.ResponseMessage;
@@ -149,6 +150,9 @@ public class WeiZhangController extends BaseController {
 			return resMsg;
 		}
 		
+		//移除验证码session
+		request.getSession().removeAttribute(Constants.VALIDATE_CODE);
+		
 		return getResponseMsg_success(historyList);
 	}
 	
@@ -229,7 +233,10 @@ public class WeiZhangController extends BaseController {
 				//时间排序
 				Collections.sort(resultList);
 			}
-		      
+		    
+			//移除验证码session
+			request.getSession().removeAttribute(Constants.VALIDATE_CODE);
+			
 			return getResponseMsg_success(resultList);
 		}catch(Exception ex) {
 			logger.error(ex.getMessage());
