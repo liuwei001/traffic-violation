@@ -27,7 +27,6 @@ import com.traffic.common.constants.Constants;
 import com.traffic.common.enumcode.ResultCodeEnum;
 import com.traffic.common.exception.DalException;
 import com.traffic.common.message.ResponseMessage;
-import com.traffic.common.utils.MD5Encrypt;
 import com.traffic.common.utils.UUIDGenerator;
 import com.traffic.common.utils.http.HttpClientUtils;
 import com.traffic.weizhang.entity.City;
@@ -36,6 +35,8 @@ import com.traffic.weizhang.entity.Result;
 import com.traffic.weizhang.entity.TQueryHistory;
 import com.traffic.weizhang.listener.SuppliersLoader;
 import com.traffic.weizhang.service.IQueryHistoryService;
+import com.traffic.weizhang.strategy.AbstractSuppplier;
+import com.traffic.weizhang.strategy.SuppplierContext;
 
 /**
  * 交通违章信息controller
@@ -51,12 +52,6 @@ public class WeiZhangController extends BaseController {
 	
 	@Autowired
 	private IQueryHistoryService queryHistoryService;
-	
-	@Value("${weizhang.appid}")
-	private String appid;
-	
-	@Value("${weizhang.appkey}")
-	private String appkey;
 	
 	@Value("${weizhang.citys.interface}")
 	private String citys_interface_url;
@@ -164,55 +159,45 @@ public class WeiZhangController extends BaseController {
 	@ResponseBody
 	public ResponseMessage queryList(HttpServletRequest request) {
 		JSONObject reqJsonBody = (JSONObject)request.getAttribute("reqBody");
-		/*if(StringUtils.isEmpty(query_interface_url)) {
-			logger.error("cfg.properties属性文件中没有配置违章查询接口地址,配置参数为：violation.query.interface");
-			return getResponseMsg_failed(ResultCodeEnum.SYSTEM_EXCEPTION);
-		}*/
 		try {
-			reqJsonBody.put("appid", appid);
-			
 			List<Result> resultList = new ArrayList<Result>();
 			
 			String cityStr = reqJsonBody.getString("city");
 			String[] citys = cityStr.split("、");
 			for(String citycode : citys) {
 				String interUrl = "";//供应商接口url
+				String classname= ""; //执行的策略类
 				Map<String,String[]> supplierMap = SuppliersLoader.getCity_Supplier_Map();
 				if(!supplierMap.containsKey(citycode)) {//未配置指定的城市供应商，则通过默认供应商查询
 					String[] serpplierInfo = supplierMap.get("default");
 					interUrl = serpplierInfo[1];
+					classname = serpplierInfo[2];
 					if(logger.isDebugEnabled()) {
-						logger.debug("citycode : " + citycode + ",default url:" + interUrl);
+						logger.debug("citycode : " + citycode + ",default url:" + interUrl + ",classname:" + classname);
 					}
 				} else {
 					String[] serpplierInfo = supplierMap.get(citycode);
 					citycode = serpplierInfo[0];
 					interUrl = serpplierInfo[1];
+					classname = serpplierInfo[2];
 					if(logger.isDebugEnabled()) {
-						logger.debug("citycode : " + citycode + ",url:" + interUrl);
+						logger.debug("citycode : " + citycode + ",url:" + interUrl + ",classname:" + classname);
 					}
 				}
-				String carno = reqJsonBody.getString("carno");
-				if(logger.isDebugEnabled()) {
-					logger.debug("sign key : " + (citycode + carno + appkey));
-				}
-				String sign_md5 = MD5Encrypt.encrypt(citycode + carno + appkey,"UTF-8");
-				if(logger.isDebugEnabled()) {
-					logger.debug("sign md5 : " + sign_md5);
-				}
-				//设置签名参数
-				reqJsonBody.put("sign", sign_md5);
 				reqJsonBody.put("city", citycode);
 				
-				String respBody = HttpClientUtils.httpPost_JSONObject(interUrl, reqJsonBody);
-				JSONObject respObj = JSON.parseObject(respBody);
-				if("0".equals(respObj.getString("resultCode"))) {
-					List<Result> _resultList = JSONArray.parseArray(respObj.getString("result"), Result.class);
+				//根据类名反射策略对象，执行策略
+				AbstractSuppplier instance = (AbstractSuppplier) Class.forName(classname).newInstance(); 
+				SuppplierContext context = new SuppplierContext(instance);
+				JSONObject respJsonBody = context.executeQuery(reqJsonBody,interUrl);
+				
+				if("0".equals(respJsonBody.getString("resultCode"))) {
+					List<Result> _resultList = JSONArray.parseArray(respJsonBody.getString("result"), Result.class);
 					if(_resultList != null && _resultList.size() > 0) {
 						resultList.addAll(_resultList);
 					}
 				} else {
-					return JSON.parseObject(respBody, ResponseMessage.class);
+					return JSONObject.toJavaObject(respJsonBody, ResponseMessage.class);
 				}
 			}
 			

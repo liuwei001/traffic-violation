@@ -10,24 +10,15 @@ targetCode属性： 针对不同的供应商对城市编码的转换
 	<supplier>
 		<description>默认供应商</description>
 		<url>http://testapi.zonghengche.com:8807/weizhang/query</url>
+		<classname>com.traffic.weizhang.strategy.ZonghengcheSupplier</classname>
 	</supplier>
 	
 	<supplier>
 		<description>广东--供应商</description>
-		<url>http://apis.zonghengche.com:8807/weizhang/query</url>
+		<url>http://api.buding.cn/v3/violations</url>
+		<classname>com.traffic.weizhang.strategy.BudingSupplier</classname>
 		<cityCodes>
-			<city_code targetCode="GD_GuangZhou">GD_GuangZhou</city_code>
-			<city_code targetCode="GD_ShenZhen">GD_ShenZhen</city_code>
-		</cityCodes>
-	</supplier>
-	
-	<supplier>
-		<description>北京--供应商</description>
-		<url>http://apis.zonghengche.com:8807/weizhang/query</url>
-		<cityCodes>
-			<city_code targetCode="BJ">BJ</city_code>
-			<city_code targetCode="BJ2">BJ2</city_code>
-			<city_code targetCode="BJ3">BJ3</city_code>
+			<city_code targetCode="shenzhen">GD_ShenZhen</city_code>
 		</cityCodes>
 	</supplier>
 

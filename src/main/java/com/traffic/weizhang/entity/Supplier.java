@@ -11,12 +11,24 @@ import java.util.List;
  */
 public class Supplier {
 
+	/**
+	 * 描述
+	 */
 	private String description;
 	
-	private String paramKey;
+	/**
+	 * 执行的class路径
+	 */
+	private String classname;
 	
+	/**
+	 * 接口url
+	 */
 	private String url;
 	
+	/**
+	 * 调用该供应商的城市
+	 */	
 	private List<CityCode> cityCodeList = new ArrayList<CityCode>();
 
 	public String getDescription() {
@@ -25,14 +37,6 @@ public class Supplier {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public String getParamKey() {
-		return paramKey;
-	}
-
-	public void setParamKey(String paramKey) {
-		this.paramKey = paramKey;
 	}
 
 	public String getUrl() {
@@ -53,6 +57,14 @@ public class Supplier {
 
 	public void setCityCodeList(List<CityCode> cityCodeList) {
 		this.cityCodeList = cityCodeList;
+	}
+
+	public String getClassname() {
+		return classname;
+	}
+
+	public void setClassname(String classname) {
+		this.classname = classname;
 	}
 
 }

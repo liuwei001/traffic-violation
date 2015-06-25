@@ -13,7 +13,7 @@ public class Result implements Serializable, Comparable<Result> {
 
 	private String fen;
 
-	private float money;
+	private String money;
 
 	private String area;
 
@@ -38,11 +38,11 @@ public class Result implements Serializable, Comparable<Result> {
 		this.fen = fen;
 	}
 
-	public float getMoney() {
+	public String getMoney() {
 		return money;
 	}
 
-	public void setMoney(float money) {
+	public void setMoney(String money) {
 		this.money = money;
 	}
 

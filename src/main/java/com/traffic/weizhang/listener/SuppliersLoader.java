@@ -37,6 +37,7 @@ public class SuppliersLoader {
 		digester.addSetNext("suppliers/supplier", "addSupplier");
 		
 		digester.addBeanPropertySetter("suppliers/supplier/description", "description");  
+		digester.addBeanPropertySetter("suppliers/supplier/classname", "classname"); 
 		digester.addBeanPropertySetter("suppliers/supplier/url", "url"); 
 		
 		digester.addObjectCreate("suppliers/supplier/cityCodes/city_code", CityCode.class);
@@ -53,10 +54,10 @@ public class SuppliersLoader {
 				List<CityCode> cityCodeList = supplier.getCityCodeList();
 				if(cityCodeList != null && cityCodeList.size() > 0) {
 					for(CityCode cityCode : cityCodeList) {
-						city_Supplier_Map.put(cityCode.getCitycode(), new String[]{cityCode.getTargetCode() == null?cityCode.getCitycode():cityCode.getTargetCode(),supplier.getUrl()});
+						city_Supplier_Map.put(cityCode.getCitycode(), new String[]{cityCode.getTargetCode() == null?cityCode.getCitycode():cityCode.getTargetCode(),supplier.getUrl(),supplier.getClassname()});
 					}
 				} else { //默认供应商
-					city_Supplier_Map.put("default",new String[]{"", supplier.getUrl()});
+					city_Supplier_Map.put("default",new String[]{"", supplier.getUrl(),supplier.getClassname()});
 				}
 			}
 			
@@ -76,5 +77,7 @@ public class SuppliersLoader {
 		SuppliersLoader.city_Supplier_Map = city_Supplier_Map;
 	}
 
-
+	public static void main(String[] args) {
+		SuppliersLoader.init();
+	}
 }
