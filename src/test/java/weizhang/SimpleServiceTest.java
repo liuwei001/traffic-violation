@@ -110,6 +110,7 @@ public class SimpleServiceTest {
 		String s = "license_plate_num=%E7%B2%A4BA804D&engine_num=C32764&body_num=064484&city_pinyin=shenzhen";
 		//计算签名
 		String SIGNATURE = md5("POST&/v3/violations&"+date+"&"+s.length()+"&"+ md5("uTIYrJn6vJTyt1ztBNbqQQDexDjpAM4m"));
+		System.out.println(SIGNATURE);
 		//设置请求头
 		Map<String, String> headers = new HashMap<String, String>();
 		headers.put("Host", "api.buding.cn");

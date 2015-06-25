@@ -3,10 +3,15 @@
  */
 package com.traffic.common.utils.http;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.Map.Entry;
 
 import org.apache.http.HttpEntity;
@@ -28,6 +33,7 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
+import com.traffic.common.utils.MD5Encrypt;
 
 /**
  * 描述：
@@ -50,17 +56,17 @@ public class HttpClientUtils {
 	private static Map<String, String> headers = new HashMap<String, String>();
 
 	static {
-		headers.put("User-Agent",
-				"Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.1.2)");
-		headers.put("Accept-Language", "zh-cn,zh;q=0.5");
-		headers.put("Accept-Charset", "GB2312,utf-8;q=0.7,*;q=0.7");
-		headers.put(
-				"Accept",
-				" image/gif, image/x-xbitmap, image/jpeg, "
-						+ "image/pjpeg, application/x-silverlight, application/vnd.ms-excel, "
-						+ "application/vnd.ms-powerpoint, application/msword, application/x-shockwave-flash, */*");
+//		headers.put("User-Agent",
+//				"Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9.1.2)");
+//		headers.put("Accept-Language", "zh-cn,zh;q=0.5");
+//		headers.put("Accept-Charset", "GB2312,utf-8;q=0.7,*;q=0.7");
+//		headers.put(
+//				"Accept",
+//				" image/gif, image/x-xbitmap, image/jpeg, "
+//						+ "image/pjpeg, application/x-silverlight, application/vnd.ms-excel, "
+//						+ "application/vnd.ms-powerpoint, application/msword, application/x-shockwave-flash, */*");
 		headers.put("Content-Type", "application/x-www-form-urlencoded");
-		headers.put("Accept-Encoding", "gzip, deflate");
+//		headers.put("Accept-Encoding", "gzip, deflate");
 	}
 
 	/**
@@ -142,10 +148,6 @@ public class HttpClientUtils {
 		try {
 //			httpclient = HttpConnectionManager.getHttpClient();
 			httpclient = new DefaultHttpClient();
-			// 设置cookie的兼容性---考虑是否需要
-			httpclient.getParams().setParameter(ClientPNames.COOKIE_POLICY,
-					CookiePolicy.BROWSER_COMPATIBILITY);
-//			httpclient.getParams().setParameter(, arg1)
 			httpclient.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, "UTF-8");  
 			httpPost = new HttpPost(url);
 			// 设置各种头信息
@@ -239,10 +241,26 @@ public class HttpClientUtils {
 	
 	
 	public static void main(String[] args) {
-		headers.put("Host", "api.buding.cn");
-		headers.put("Authorization", "dLSQ1ZjK7exqlwqx:91191dde73a580ddeb2b7deb1a0d1c1b");
-		headers.put("Date", "Wed, 17 Jun 2015 00:56:34 GMT");
+		//将cst时间格式转换为GMT时间格式
+		DateFormat format=new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH);
+		format.setTimeZone(TimeZone.getTimeZone("GMT"));
+		String date = format.format(new Date());
 		
+		String s = "license_plate_num=%E7%B2%A4BA804D&engine_num=C32764&body_num=064484&city_pinyin=shenzhen";
+		//计算签名
+		String SIGNATURE = MD5Encrypt.encrypt("POST&/v3/violations&"+date+"&"+s.length()+"&"+ MD5Encrypt.encrypt("uTIYrJn6vJTyt1ztBNbqQQDexDjpAM4m"));
+		//设置请求头
+		headers.put("Host", "api.buding.cn");
+		headers.put("Authorization", "dLSQ1ZjK7exqlwqx:" + SIGNATURE);
+		headers.put("Date", date);
+		
+		JSONObject reqParam = new JSONObject();
+		reqParam.put("license_plate_num", "粤BA804D");
+		reqParam.put("engine_num", "C32764");
+		reqParam.put("body_num", "064484");
+		reqParam.put("city_pinyin", "shenzhen");
+		String respBody = HttpClientUtils.httpPost_JSONObject("http://api.buding.cn/v3/violations", reqParam);
+		System.out.println(JSONObject.parse(respBody));
 	}
 	
 }
