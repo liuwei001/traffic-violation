@@ -1773,10 +1773,15 @@ input[type="button"].btn-block {
 .gap-4x {
   margin-bottom: 80px;
 }
+.n-pdr {
+  padding-right: 0;
+}
+.n-pdr .has-error {
+  right: 5px;
+}
 #city + span.has-error,
 #year + span.has-error,
-#month + span.has-error,
-#code + span.has-error {
+#month + span.has-error {
   display: none !important;
 }
 .icon {
@@ -1880,7 +1885,7 @@ input.has-error::-webkit-input-placeholder {
 .main-content .main-header > *.active .icon {
   background: url(../img/icon.png) -40px 0 no-repeat;
 }
-.main-content .btn-block {
+.main-content .btn-primary.btn-block {
   margin-top: 12px;
 }
 .main-content .col-xs-4.control-label {
@@ -1968,6 +1973,18 @@ input.has-error::-webkit-input-placeholder {
 }
 .result .no-result p {
   margin-bottom: 0;
+}
+.result .no-result strong {
+  font-weight: 500;
+  font-size: 18px;
+}
+.result .rs-icon {
+  background: url(../img/icon.png) -87px 0 no-repeat;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  margin-bottom: -6px;
+  margin-right: 5px;
 }
 .subscibe {
   margin-top: 40px;

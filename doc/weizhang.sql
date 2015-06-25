@@ -18,4 +18,20 @@ CREATE TABLE `t_query_history` (
   `cartype` varchar(20) DEFAULT NULL COMMENT '车牌类型',
   `create_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='历史查询记录';
+
+
+DROP TABLE IF EXISTS `t_subscribe`;
+CREATE TABLE `t_subscribe` (
+  `id` varchar(32) NOT NULL DEFAULT '' COMMENT '主键id',
+  `mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '手机号',
+  `carno` varchar(20) NOT NULL DEFAULT '' COMMENT '车牌号',
+  `city` varchar(20) DEFAULT NULL COMMENT '城市编码',
+  `engineno` varchar(50) DEFAULT NULL COMMENT '发动机号',
+  `classno` varchar(50) DEFAULT NULL COMMENT '车架号',
+  `carmodel` varchar(100) DEFAULT NULL COMMENT '车型',
+  `cartype` varchar(20) DEFAULT NULL COMMENT '车牌类型',
+  `create_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',  
+  `lastsend_time` datetime DEFAULT NULL COMMENT '最后发送时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订阅';

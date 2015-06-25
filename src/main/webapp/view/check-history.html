@@ -29,21 +29,21 @@
         </div>
         <div class="result row">
             <div class="check col-xs-6 col-xs-offset-3">
-            	<form id="form" onsubmit="return false;">
+            	<form id="main-form" name="main-form" onsubmit="return false;">
                 <div class="form-horizontal info">
                     <div class="form-group">
                         <label class="col-xs-3 control-label">手机号</label>
                         <div class="col-xs-7">
-                            <input type="text" class="form-control" id="mobile" name="mobile">
+                               <input type="text" class="form-control" placeholder="请输入手机号" id="mobile" name="phone" lang="param" >
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-3 control-label">验证码</label>
                         <div class="col-xs-4">
-                            <input type="text" class="form-control">
+                             <input type="text" id="code" class="form-control" name="code" placeholder="请输入验证码">
                         </div>
                         <div class="col-xs-3">
-                            <span class="btn btn-secondary btn-block">免费获取</span>
+                            <span id="sent-msg"  class="btn btn-secondary btn-block">免费获取验证码</span>
                         </div>
                     </div>
                     <div class="form-group">
@@ -56,10 +56,10 @@
                     </div>
                 </div>
                 </form>
-                <div class="info hide">
+                <!-- <div class="info hide">
                     <h4 class="text-primary">恭喜，</h4>
                     <p>您已成功订阅平安违章查询服务，将定期将粤BD8888违章信息发送至您预留的1343338888手机中。</p>
-                </div>
+                </div> -->
             </div>
         </div>
         <!--         <div class="row subscibe">
@@ -84,26 +84,12 @@
         <img class="img-responsive" src="../img/footer.jpg" alt="">
     </div>
     <script>
-    window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')
+    window.jQuery || document.write('<script src="../js/vendor/jquery-1.9.0.min.js"><\/script>')
     </script>
     <!-- <script src="js/tab.js"></script> -->
     <script src="../js/main.js"></script>
+    <script src="../js/controller/check-history.js"></script>    
     <script src="../js/common/Utility.js"></script>
-    <script type="text/javascript">
-    	$(function() {
-    		
-    		$("#form").submit(function() {
-    			var mobile = $("#mobile").val();
-    			if(trim(mobile) == "") {
-    				$("#mobile").focus();
-    				return false;
-    			}
-    			
-           		window.location = "history.html?mobile=" + mobile;
-           		
-        	});
-    	});
-    </script>
 </body>
 
 </html>
