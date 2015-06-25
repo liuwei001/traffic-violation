@@ -145,6 +145,7 @@ public class HttpClientUtils {
 			// 设置cookie的兼容性---考虑是否需要
 			httpclient.getParams().setParameter(ClientPNames.COOKIE_POLICY,
 					CookiePolicy.BROWSER_COMPATIBILITY);
+//			httpclient.getParams().setParameter(, arg1)
 			httpclient.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, "UTF-8");  
 			httpPost = new HttpPost(url);
 			// 设置各种头信息
@@ -237,5 +238,11 @@ public class HttpClientUtils {
 	}
 	
 	
+	public static void main(String[] args) {
+		headers.put("Host", "api.buding.cn");
+		headers.put("Authorization", "dLSQ1ZjK7exqlwqx:91191dde73a580ddeb2b7deb1a0d1c1b");
+		headers.put("Date", "Wed, 17 Jun 2015 00:56:34 GMT");
+		
+	}
 	
 }

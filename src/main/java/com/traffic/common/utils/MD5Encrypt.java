@@ -76,7 +76,7 @@ public class MD5Encrypt {
 
 	public static void main(String[] args) throws Exception {
 		System.out.println(MD5Encrypt
-				.encrypt("GD_ShenZhen粤BA804D9fdcd715d108a0bd51f481b3571ea2db","UTF-8"));
+				.encrypt("POST&/v3/violations&Wed, 17 Jun 2015 00:56:34 GMT&0&" + MD5Encrypt.encrypt("uTIYrJn6vJTyt1ztBNbqQQDexDjpAM4m "),"UTF-8"));
 		
 	}
 
