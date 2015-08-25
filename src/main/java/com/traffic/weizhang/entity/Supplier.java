@@ -1,7 +1,9 @@
 package com.traffic.weizhang.entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -14,7 +16,7 @@ public class Supplier {
 	/**
 	 * 描述
 	 */
-	private String description;
+	private String name;
 	
 	/**
 	 * 执行的class路径
@@ -25,18 +27,23 @@ public class Supplier {
 	 * 接口url
 	 */
 	private String url;
-	
+
 	/**
 	 * 调用该供应商的城市
 	 */	
 	private List<CityCode> cityCodeList = new ArrayList<CityCode>();
+	
+	/**
+	 * citycode映射关系
+	 */
+	private Map<String,String> cityCodeMap = new HashMap<String, String>();
 
-	public String getDescription() {
-		return description;
+	public String getName() {
+		return name;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getUrl() {
@@ -65,6 +72,15 @@ public class Supplier {
 
 	public void setClassname(String classname) {
 		this.classname = classname;
+	}
+
+
+	public Map<String, String> getCityCodeMap() {
+		return cityCodeMap;
+	}
+
+	public void setCityCodeMap(Map<String, String> cityCodeMap) {
+		this.cityCodeMap = cityCodeMap;
 	}
 
 }

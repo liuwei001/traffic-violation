@@ -150,6 +150,15 @@ public class HttpClientUtils {
 			if (statusCode != HttpStatus.SC_OK) {
 				logger.error("HttpStatus ERROR" + "Method failed: "
 						+ response.getStatusLine());
+				entity = response.getEntity();
+				if (null != entity) {
+					byte[] bytes = EntityUtils.toByteArray(entity);
+					result = new String(bytes, "UTF-8");
+				} else {
+					logger.error("httpPost URL [" + url
+							+ "],httpEntity is null.");
+				}
+				logger.debug("httpPost response:" + result);
 				return "";
 			} else {
 				entity = response.getEntity();

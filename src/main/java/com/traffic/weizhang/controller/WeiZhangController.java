@@ -32,6 +32,8 @@ import com.traffic.common.utils.http.HttpClientUtils;
 import com.traffic.weizhang.entity.City;
 import com.traffic.weizhang.entity.Province;
 import com.traffic.weizhang.entity.Result;
+import com.traffic.weizhang.entity.Supplier;
+import com.traffic.weizhang.entity.Suppliers;
 import com.traffic.weizhang.entity.TQueryHistory;
 import com.traffic.weizhang.listener.SuppliersLoader;
 import com.traffic.weizhang.service.IQueryHistoryService;
@@ -159,48 +161,29 @@ public class WeiZhangController extends BaseController {
 	@ResponseBody
 	public ResponseMessage queryList(HttpServletRequest request) {
 		JSONObject reqJsonBody = (JSONObject)request.getAttribute("reqBody");
+		
 		try {
-			List<Result> resultList = new ArrayList<Result>();
+			JSONArray jarray = new JSONArray();
+			JSONObject resultObj = new JSONObject();
 			
-			String cityStr = reqJsonBody.getString("city");
-			String[] citys = cityStr.split("、");
-			for(String citycode : citys) {
-				String interUrl = "";//供应商接口url
-				String classname= ""; //执行的策略类
-				Map<String,String[]> supplierMap = SuppliersLoader.getCity_Supplier_Map();
-				if(!supplierMap.containsKey(citycode)) {//未配置指定的城市供应商，则通过默认供应商查询
-					String[] serpplierInfo = supplierMap.get("default");
-					interUrl = serpplierInfo[1];
-					classname = serpplierInfo[2];
-					if(logger.isDebugEnabled()) {
-						logger.debug("citycode : " + citycode + ",default url:" + interUrl + ",classname:" + classname);
-					}
-				} else {
-					String[] serpplierInfo = supplierMap.get(citycode);
-					citycode = serpplierInfo[0];
-					interUrl = serpplierInfo[1];
-					classname = serpplierInfo[2];
-					if(logger.isDebugEnabled()) {
-						logger.debug("citycode : " + citycode + ",url:" + interUrl + ",classname:" + classname);
-					}
-				}
-				reqJsonBody.put("city", citycode);
-				
-				//根据类名反射策略对象，执行策略
-				AbstractSuppplier instance = (AbstractSuppplier) Class.forName(classname).newInstance(); 
-				SuppplierContext context = new SuppplierContext(instance);
-				JSONObject respJsonBody = context.executeQuery(reqJsonBody,interUrl);
-				
-				if("0".equals(respJsonBody.getString("resultCode"))) {
-					List<Result> _resultList = JSONArray.parseArray(respJsonBody.getString("result"), Result.class);
-					if(_resultList != null && _resultList.size() > 0) {
-						resultList.addAll(_resultList);
-					}
-				} else {
-					return JSONObject.toJavaObject(respJsonBody, ResponseMessage.class);
+			//获取所有供应商遍历
+			Suppliers  suppliers = SuppliersLoader.getSuppliers();
+			if(suppliers != null && suppliers.getSupplierList() != null) {
+				for(Supplier supplier : suppliers.getSupplierList()) {
+					resultObj = queryResults(reqJsonBody,supplier);
+					jarray.add(resultObj);
 				}
 			}
 			
+			/*//默认供应商
+			resultObj = queryResults(reqJsonBody,null);
+			jarray.add(resultObj);
+			
+			//第二家供应商
+			Map<String,String[]> supplierMap = SuppliersLoader.getCity_Supplier_Map();
+			resultObj = queryResults(reqJsonBody,supplierMap);
+			jarray.add(resultObj);*/
+				
 			TQueryHistory queryHistory = JSON.toJavaObject(reqJsonBody, TQueryHistory.class);
 			queryHistory.setId(UUIDGenerator.getUUID());
 			queryHistory.setCreateTime(new Date());
@@ -208,25 +191,82 @@ public class WeiZhangController extends BaseController {
 			Thread saveHistoryThead = new QueryHistoryThread(queryHistory);
 			saveHistoryThead.start();
 			
-			if(resultList.size() > 0) { 
-				
-				//通过hashset去重复
-				HashSet<Result> h = new HashSet<Result>(resultList);  
-				resultList.clear();  
-				resultList.addAll(h);  
-				
-				//时间排序
-				Collections.sort(resultList);
-			}
 		    
 			//移除验证码session
 			request.getSession().removeAttribute(Constants.VALIDATE_CODE);
 			
-			return getResponseMsg_success(resultList);
+			return getResponseMsg_success(jarray);
+		
 		}catch(Exception ex) {
 			logger.error(ex.getMessage());
+			ex.printStackTrace();
 			return getResponseMsg_failed(ResultCodeEnum.SYSTEM_EXCEPTION);
 		}
+	}
+	
+	/**
+	 * 查询结果
+	 * @return
+	 */
+	private JSONObject queryResults(JSONObject reqJsonBody,Supplier supplier) {
+		
+		long startTime = System.currentTimeMillis();
+		
+		JSONObject resultObj = new JSONObject();
+
+		List<Result> resultList = new ArrayList<Result>();
+		
+		String cityStr = reqJsonBody.getString("city");
+		String[] citys = cityStr.split("、");
+		
+		for(String citycode : citys) {
+			
+			if(logger.isDebugEnabled()) {
+					logger.debug("citycode : " + citycode + ",url:" + supplier.getUrl() + ",classname:" + supplier.getClassname());
+			}
+				
+			reqJsonBody.put("city", supplier.getCityCodeMap().size() > 0 ? supplier.getCityCodeMap().get(citycode) : citycode);
+			
+			//根据类名反射策略对象，执行策略
+			AbstractSuppplier instance;
+			try {
+				instance = (AbstractSuppplier) Class.forName(supplier.getClassname()).newInstance();
+				SuppplierContext context = new SuppplierContext(instance);
+				JSONObject respJsonBody = context.executeQuery(reqJsonBody,supplier.getUrl());
+				
+				if("0".equals(respJsonBody.getString("resultCode"))) {
+					List<Result> _resultList = JSONArray.parseArray(respJsonBody.getString("result"), Result.class);
+					if(_resultList != null && _resultList.size() > 0) {
+						resultList.addAll(_resultList);
+					}
+				} else {
+					return null;
+				}
+				
+			} catch (Exception ex) {
+				// TODO Auto-generated catch block
+				ex.printStackTrace();
+			} 
+		}
+		
+		if(resultList.size() > 0) { 
+			
+			//通过hashset去重复
+			HashSet<Result> h = new HashSet<Result>(resultList);  
+			resultList.clear();  
+			resultList.addAll(h);  
+			
+			//时间排序
+			Collections.sort(resultList);
+		}
+		
+		long endTime = System.currentTimeMillis();
+		
+		resultObj.put("supplierName", supplier.getName());//供应商名称
+		resultObj.put("times", endTime - startTime);
+		resultObj.put("wzlist", resultList);
+		
+		return resultObj;
 	}
 	
 	

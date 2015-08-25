@@ -8,17 +8,18 @@ targetCode属性： 针对不同的供应商对城市编码的转换
 <suppliers>
 	
 	<supplier>
-		<description>默认供应商</description>
-		<url>http://testapi.zonghengche.com:8807/weizhang/query</url>
+		<name>车营科技</name>
+		<url>http://apis.zonghengche.com:8807/weizhang/query</url>
 		<classname>com.traffic.weizhang.strategy.ZonghengcheSupplier</classname>
 	</supplier>
 	
 	<supplier>
-		<description>广东--供应商</description>
+		<name>北京步鼎方舟科技有限公司</name>
 		<url>http://api.buding.cn/v3/violations</url>
 		<classname>com.traffic.weizhang.strategy.BudingSupplier</classname>
 		<cityCodes>
 			<city_code targetCode="shenzhen">GD_ShenZhen</city_code>
+			<city_code targetCode="guangzhou">GD_GuangZhou</city_code>
 		</cityCodes>
 	</supplier>
 

@@ -28,6 +28,7 @@
         </div>
         <div class="result">
             <h5><span class="text-primary" id="carno"></span> 违章信息</h5>
+            <br>
             <span id="weizhang_info">
             	<div class='no-result'>
             		<p>正在查询，请稍候............</p>
@@ -98,9 +99,11 @@
     <script src="../js/main.js"></script>
     <script src="../js/controller/result.js"></script>
     <script src="../js/common/common.js"></script>
+    <script src="../js/json2.min.js"></script>
     <script src="../js/common/Utility.js"></script>
 	<script src="../js/vendor/jsrender.min.js"></script>
     <script id="list_template" type="text/x-jsrender">
+      <h5>运营商：{{:supplierName}} &nbsp;&nbsp;&nbsp;&nbsp;查询耗时： {{:times}} ms</h5>
            <table class="table table-bordered main-table">
                 <thead>
                     <tr>
@@ -113,7 +116,7 @@
                     </tr>
                 </thead>
                 <tbody>
-				{{for weizhanglist}}
+				{{for wzlist}}
                  <tr>
                     <td>{{:date}}</td>
                  	<td>{{:area}}</td>
@@ -134,25 +137,39 @@
     	syncData("querylist","POST",reqParam,function(success,data){
 	        if(success == true){
 	        	if(data != null) {
-	        		var weizhangdata = {};
-	        		weizhangdata.weizhanglist = data;
-	        		$("#weizhang_info").html($("#list_template").render(weizhangdata));
+	        		var suppliers = data;
+	        		$("#weizhang_info").html("");
+	        		if(suppliers != null && suppliers.length > 0) {
+	        			for(var i = 0; i < suppliers.length; i++) {
+	        				
+	        				if(suppliers[i] == null) {
+	        		        	$("#weizhang_info").append("<h5>运营商："+ suppliers[i].supplierName +" &nbsp;&nbsp;&nbsp;&nbsp;查询耗时： "+ suppliers[i].times +" ms</h5><div class='no-result'><span style='font-size:12px;color:red'>系统请求出错："+ data.resultMsg +"</span></div>");
+	        				} else {
+	        					if(suppliers[i].wzlist == "") {
+		        	        		var date = new Date();
+		        	        	    var seperator1 = "-";
+		        	        	    var seperator2 = ":";
+		        	        	    var month = date.getMonth() + 1;
+		        	        	    var strDate = date.getDate();
+		        	        	    if (month >= 1 && month <= 9) {
+		        	        	        month = "0" + month;
+		        	        	    }
+		        	        	    if (strDate >= 0 && strDate <= 9) {
+		        	        	        strDate = "0" + strDate;
+		        	        	    }
+		        	        	    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate + " 00:00:00";
+		        	        		$("#weizhang_info").append("<h5>运营商："+ suppliers[i].supplierName +" &nbsp;&nbsp;&nbsp;&nbsp;查询耗时： "+ suppliers[i].times +" ms</h5><div class='no-result'> <p><span class=\"rs-icon\"></span><strong class=\"text-primary\">恭喜,</strong> 该车辆暂无违章记录，数据更新至"+ currentdate +"</p></div>");
+		
+		        				} else {
+		        					$("#weizhang_info").append($("#list_template").render(suppliers[i]));
+		        				}
+	        				}
+	        			}
+	        		}
+	        		
 	        	} else {
-	        		var date = new Date();
-	        	    var seperator1 = "-";
-	        	    var seperator2 = ":";
-	        	    var month = date.getMonth() + 1;
-	        	    var strDate = date.getDate();
-	        	    if (month >= 1 && month <= 9) {
-	        	        month = "0" + month;
-	        	    }
-	        	    if (strDate >= 0 && strDate <= 9) {
-	        	        strDate = "0" + strDate;
-	        	    }
-	        	    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate + " 00:00:00";
-	        		$("#weizhang_info").html("<div class='no-result'> <p><span class=\"rs-icon\"></span><strong class=\"text-primary\">恭喜,</strong> 该车辆暂无违章记录，数据更新至"+ currentdate +"</p></div>");
+		        	$("#weizhang_info").html("<div class='no-result'><span style='font-size:12px;color:red'>系统请求出错："+ data.resultMsg +"</span></div>");
 	        	}
-	            
 	        }else{
 	        	$("#weizhang_info").html("<div class='no-result'><span style='font-size:12px;color:red'>系统请求出错："+ data.resultMsg +"</span></div>");
 	        }

@@ -24,6 +24,8 @@ public class SuppliersLoader {
 	private static final Logger logger = Logger.getLogger(SuppliersLoader.class);
 	
 	private static Map<String,String[]> city_Supplier_Map = new HashMap<String, String[]>();
+	
+	private static Suppliers suppliers = new Suppliers();
 
 	public static void init() {
 		
@@ -36,7 +38,7 @@ public class SuppliersLoader {
 		digester.addSetProperties("suppliers/supplier");
 		digester.addSetNext("suppliers/supplier", "addSupplier");
 		
-		digester.addBeanPropertySetter("suppliers/supplier/description", "description");  
+		digester.addBeanPropertySetter("suppliers/supplier/name", "name");  
 		digester.addBeanPropertySetter("suppliers/supplier/classname", "classname"); 
 		digester.addBeanPropertySetter("suppliers/supplier/url", "url"); 
 		
@@ -48,17 +50,23 @@ public class SuppliersLoader {
 		
 		
 		try {
-			Suppliers suppliers = (Suppliers)digester.parse(inStream);
+			suppliers = (Suppliers)digester.parse(inStream);
 			List<Supplier> suppliersList = suppliers.getSupplierList();
 			for(Supplier supplier : suppliersList) {
 				List<CityCode> cityCodeList = supplier.getCityCodeList();
 				if(cityCodeList != null && cityCodeList.size() > 0) {
 					for(CityCode cityCode : cityCodeList) {
-						city_Supplier_Map.put(cityCode.getCitycode(), new String[]{cityCode.getTargetCode() == null?cityCode.getCitycode():cityCode.getTargetCode(),supplier.getUrl(),supplier.getClassname()});
+						supplier.getCityCodeMap().put(cityCode.getCitycode(), cityCode.getTargetCode() == null?cityCode.getCitycode():cityCode.getTargetCode());
+					}
+				}
+				
+				/*if(cityCodeList != null && cityCodeList.size() > 0) {
+					for(CityCode cityCode : cityCodeList) {
+						city_Supplier_Map.put(cityCode.getCitycode(), new String[]{cityCode.getTargetCode() == null?cityCode.getCitycode():cityCode.getTargetCode(),supplier.getUrl(),supplier.getClassname(),supplier.getName()});
 					}
 				} else { //默认供应商
-					city_Supplier_Map.put("default",new String[]{"", supplier.getUrl(),supplier.getClassname()});
-				}
+					city_Supplier_Map.put("default",new String[]{"", supplier.getUrl(),supplier.getClassname(),supplier.getName()});
+				}*/
 			}
 			
 			logger.info("初始化加载供应商配置....end.");
@@ -79,5 +87,13 @@ public class SuppliersLoader {
 
 	public static void main(String[] args) {
 		SuppliersLoader.init();
+	}
+
+	public static Suppliers getSuppliers() {
+		return suppliers;
+	}
+
+	public static void setSuppliers(Suppliers suppliers) {
+		SuppliersLoader.suppliers = suppliers;
 	}
 }

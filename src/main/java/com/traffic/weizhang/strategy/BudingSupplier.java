@@ -15,6 +15,7 @@ import java.util.TimeZone;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.traffic.common.holder.PropertiesCfgHolder;
@@ -65,7 +66,7 @@ public class BudingSupplier extends AbstractSuppplier {
 		headers.put("Host", "api.buding.cn");
 		headers.put("Authorization", PropertiesCfgHolder.getProperty("buding.appkey")+":" + SIGNATURE);
 		headers.put("Date", date);
-		
+		System.out.println(JSON.toJSONString(headers));
 		JSONObject reqParam = new JSONObject();
 		reqParam.put("license_plate_num", carno);
 		reqParam.put("engine_num", engineno);
@@ -104,4 +105,19 @@ public class BudingSupplier extends AbstractSuppplier {
 		
 	}
 
+	
+	 public static void main(String[] args) {
+	
+		 BudingSupplier supplier = new BudingSupplier();
+		 JSONObject reqJsonBody = new JSONObject();
+		reqJsonBody.put("carno", "粤BA804D");
+		 reqJsonBody.put("engineno", "C32764");
+		 reqJsonBody.put("classno", "064484");
+		 reqJsonBody.put("city", "shenzhen");
+		 
+			
+		 //{"carType":"02","engineno":"C32764","carno":"粤BA804D","classno":"064484","mobile":"18675574642","city":"GD_ShenZhen"}
+		 
+		 System.out.println(supplier.executeQuery(reqJsonBody, "http://api.buding.cn/v3/violations"));
+	}
 }
