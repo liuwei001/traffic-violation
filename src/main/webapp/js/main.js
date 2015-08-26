@@ -1605,7 +1605,7 @@ function time(o) {    
         wait = 60;    
     } else {      
         o.attr("disabled", true);      
-        o.html(wait + '秒后可重新获取');
+        o.html('重新获取(' + wait + '秒)');
         wait--;      
         setTimeout(function() {        
             time(o)      

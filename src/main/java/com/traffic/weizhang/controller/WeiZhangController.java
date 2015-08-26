@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -166,6 +167,57 @@ public class WeiZhangController extends BaseController {
 			JSONArray jarray = new JSONArray();
 			JSONObject resultObj = new JSONObject();
 			
+			if(!reqJsonBody.containsKey("supplier")) {
+				return getResponseMsg_failed(ResultCodeEnum.REQUEST_PARAM_ISNULL);
+			}
+			
+			//获取所有供应商遍历
+			Suppliers  suppliers = SuppliersLoader.getSuppliers();
+			if(suppliers != null && suppliers.getSupplierList() != null) {
+				for(Supplier supplier : suppliers.getSupplierList()) {
+					
+					//根据参数supplier来选择运营商 比如 1： 运营商1  2：运营商2
+					if(supplier.getCode().equals(reqJsonBody.get("supplier"))) {
+						resultObj = queryResults(reqJsonBody,supplier);
+						jarray.add(resultObj);
+					}
+				}
+			}
+
+			//保存查询历史记录
+			TQueryHistory queryHistory = JSON.toJavaObject(reqJsonBody, TQueryHistory.class);
+			queryHistory.setId(UUIDGenerator.getUUID());
+			queryHistory.setCreateTime(new Date());
+			
+			Thread saveHistoryThead = new QueryHistoryThread(queryHistory);
+			saveHistoryThead.start();
+		    
+			//移除验证码session
+			request.getSession().removeAttribute(Constants.VALIDATE_CODE);
+			
+			return getResponseMsg_success(jarray);
+		
+		}catch(Exception ex) {
+			logger.error(ex.getMessage());
+			ex.printStackTrace();
+			return getResponseMsg_failed(ResultCodeEnum.SYSTEM_EXCEPTION);
+		}
+	}
+	
+	
+	/**
+	 * 查询违章列表 --- 测试用
+	 * @return
+	 */
+	@RequestMapping( value = "/querylistTest",method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseMessage queryListTest(HttpServletRequest request) {
+		JSONObject reqJsonBody = (JSONObject)request.getAttribute("reqBody");
+		
+		try {
+			JSONArray jarray = new JSONArray();
+			JSONObject resultObj = new JSONObject();
+			
 			//获取所有供应商遍历
 			Suppliers  suppliers = SuppliersLoader.getSuppliers();
 			if(suppliers != null && suppliers.getSupplierList() != null) {
@@ -174,26 +226,6 @@ public class WeiZhangController extends BaseController {
 					jarray.add(resultObj);
 				}
 			}
-			
-			/*//默认供应商
-			resultObj = queryResults(reqJsonBody,null);
-			jarray.add(resultObj);
-			
-			//第二家供应商
-			Map<String,String[]> supplierMap = SuppliersLoader.getCity_Supplier_Map();
-			resultObj = queryResults(reqJsonBody,supplierMap);
-			jarray.add(resultObj);*/
-				
-			TQueryHistory queryHistory = JSON.toJavaObject(reqJsonBody, TQueryHistory.class);
-			queryHistory.setId(UUIDGenerator.getUUID());
-			queryHistory.setCreateTime(new Date());
-			
-			Thread saveHistoryThead = new QueryHistoryThread(queryHistory);
-			saveHistoryThead.start();
-			
-		    
-			//移除验证码session
-			request.getSession().removeAttribute(Constants.VALIDATE_CODE);
 			
 			return getResponseMsg_success(jarray);
 		
@@ -208,7 +240,9 @@ public class WeiZhangController extends BaseController {
 	 * 查询结果
 	 * @return
 	 */
-	private JSONObject queryResults(JSONObject reqJsonBody,Supplier supplier) {
+	private JSONObject queryResults(JSONObject reqJsonBodyParam,Supplier supplier) {
+		
+		JSONObject reqJsonBody = (JSONObject)reqJsonBodyParam.clone();
 		
 		long startTime = System.currentTimeMillis();
 		
@@ -219,13 +253,13 @@ public class WeiZhangController extends BaseController {
 		String cityStr = reqJsonBody.getString("city");
 		String[] citys = cityStr.split("、");
 		
-		for(String citycode : citys) {
+		for(String cityName : citys) {
 			
 			if(logger.isDebugEnabled()) {
-					logger.debug("citycode : " + citycode + ",url:" + supplier.getUrl() + ",classname:" + supplier.getClassname());
+					logger.debug("citycode : " + cityName + ",url:" + supplier.getUrl() + ",classname:" + supplier.getClassname());
 			}
-				
-			reqJsonBody.put("city", supplier.getCityCodeMap().size() > 0 ? supplier.getCityCodeMap().get(citycode) : citycode);
+			Map<String, String> citiesMap = SuppliersLoader.getCity_Supplier_Map().get(supplier.getCode());
+			reqJsonBody.put("city", citiesMap.get(cityName));
 			
 			//根据类名反射策略对象，执行策略
 			AbstractSuppplier instance;
@@ -250,12 +284,10 @@ public class WeiZhangController extends BaseController {
 		}
 		
 		if(resultList.size() > 0) { 
-			
 			//通过hashset去重复
-			HashSet<Result> h = new HashSet<Result>(resultList);  
+			HashSet<Result> h = new LinkedHashSet<Result>(resultList);  
 			resultList.clear();  
 			resultList.addAll(h);  
-			
 			//时间排序
 			Collections.sort(resultList);
 		}

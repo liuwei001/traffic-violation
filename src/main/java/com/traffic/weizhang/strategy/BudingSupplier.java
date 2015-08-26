@@ -66,7 +66,7 @@ public class BudingSupplier extends AbstractSuppplier {
 		headers.put("Host", "api.buding.cn");
 		headers.put("Authorization", PropertiesCfgHolder.getProperty("buding.appkey")+":" + SIGNATURE);
 		headers.put("Date", date);
-		System.out.println(JSON.toJSONString(headers));
+//		System.out.println(JSON.toJSONString(headers));
 		JSONObject reqParam = new JSONObject();
 		reqParam.put("license_plate_num", carno);
 		reqParam.put("engine_num", engineno);
@@ -104,6 +104,28 @@ public class BudingSupplier extends AbstractSuppplier {
 		}
 		
 	}
+	
+	
+	//查询城市列表
+	public Map<String, String> executeQueryCities(String interUrl) {
+		Map<String, String> citiesMap = new HashMap<String, String>();		
+		String respBody = HttpClientUtils.httpGet(interUrl);
+		System.out.println(respBody);
+		try {
+			if(StringUtils.isNotBlank(respBody)) {
+				JSONArray jarray = JSONArray.parseArray(respBody);
+				
+				for(int i = 0; i < jarray.size(); i++) {
+					JSONObject jobj = jarray.getJSONObject(i);
+					citiesMap.put(jobj.getString("name"), jobj.getString("pinyin"));
+				}
+			}
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			logger.error("获取城市信息出错：" + ex.getMessage());
+		}
+		return citiesMap;
+	}
 
 	
 	 public static void main(String[] args) {
@@ -120,4 +142,5 @@ public class BudingSupplier extends AbstractSuppplier {
 		 
 		 System.out.println(supplier.executeQuery(reqJsonBody, "http://api.buding.cn/v3/violations"));
 	}
+
 }

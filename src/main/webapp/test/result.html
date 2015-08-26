@@ -28,6 +28,7 @@
         </div>
         <div class="result">
             <h5><span class="text-primary" id="carno"></span> 违章信息</h5>
+            <br>
             <span id="weizhang_info">
             	<div class='no-result'>
             		<p>正在查询，请稍候............</p>
@@ -102,6 +103,7 @@
     <script src="../js/common/Utility.js"></script>
 	<script src="../js/vendor/jsrender.min.js"></script>
     <script id="list_template" type="text/x-jsrender">
+      <h5>运营商：{{:supplierName}} &nbsp;&nbsp;&nbsp;&nbsp;查询耗时： {{:times}} ms</h5>
            <table class="table table-bordered main-table">
                 <thead>
                     <tr>
@@ -132,7 +134,7 @@
     $(function() {
     	var reqParam = parseUrlParam(false);
     	$("#carno").html("[" + reqParam.carno + "]");
-    	syncData("querylist","POST",reqParam,function(success,data){
+    	syncData("querylistTest","POST",reqParam,function(success,data){
 	        if(success == true){
 	        	if(data != null) {
 	        		var suppliers = data;

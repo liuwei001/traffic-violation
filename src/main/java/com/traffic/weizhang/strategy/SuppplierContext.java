@@ -1,5 +1,7 @@
 package com.traffic.weizhang.strategy;
 
+import java.util.Map;
+
 import com.alibaba.fastjson.JSONObject;
 
 public class SuppplierContext {
@@ -15,5 +17,12 @@ public class SuppplierContext {
 	 */
 	public JSONObject executeQuery(JSONObject reqJsonBody,String interUrl) {
 		return supplier.executeQuery(reqJsonBody,interUrl);
+	}
+	
+	/**
+	 * 查询供应商支持查询的城市列表
+	 */
+	public Map<String, String> executeQueryCities(String interUrl) {
+		 return supplier.executeQueryCities(interUrl);
 	}
 }

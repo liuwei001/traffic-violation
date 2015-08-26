@@ -27,16 +27,16 @@ public class Supplier {
 	 * 接口url
 	 */
 	private String url;
-
-	/**
-	 * 调用该供应商的城市
-	 */	
-	private List<CityCode> cityCodeList = new ArrayList<CityCode>();
 	
 	/**
-	 * citycode映射关系
+	 * 运营商编码--对应cities.js城市supplier，通过这个来选择指定的运营商查询
 	 */
-	private Map<String,String> cityCodeMap = new HashMap<String, String>();
+	private String code;
+	
+	/**
+	 * 获取支持的城市列表接口地址	
+	 */
+	private String cityUrl;
 
 	public String getName() {
 		return name;
@@ -54,18 +54,6 @@ public class Supplier {
 		this.url = url;
 	}
 
-	public void addCityCode(CityCode citycode) {
-		cityCodeList.add(citycode);
-	}
-
-	public List<CityCode> getCityCodeList() {
-		return cityCodeList;
-	}
-
-	public void setCityCodeList(List<CityCode> cityCodeList) {
-		this.cityCodeList = cityCodeList;
-	}
-
 	public String getClassname() {
 		return classname;
 	}
@@ -74,13 +62,20 @@ public class Supplier {
 		this.classname = classname;
 	}
 
-
-	public Map<String, String> getCityCodeMap() {
-		return cityCodeMap;
+	public String getCityUrl() {
+		return cityUrl;
 	}
 
-	public void setCityCodeMap(Map<String, String> cityCodeMap) {
-		this.cityCodeMap = cityCodeMap;
+	public void setCityUrl(String cityUrl) {
+		this.cityUrl = cityUrl;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 }

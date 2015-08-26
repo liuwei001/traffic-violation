@@ -13,18 +13,18 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="stylesheet" href="css/ui.css">
-    <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+    <link rel="stylesheet" href="../css/ui.css">
+    <script src="../js/vendor/modernizr-2.6.2.min.js"></script>
 </head>
 
 <body>
     <div class="container gap">
-        <img class="img-responsive" src="img/head.jpg" alt="">
+        <img class="img-responsive" src="../img/head.jpg" alt="">
     </div>
     <div class="container gap-4x">
         <div class="row">
             <div class="col-xs-8">
-                <div><img class="img-responsive img-border" src="./img/topad.jpg" alt=""></div>
+                <div><img class="img-responsive img-border" src="../img/topad.jpg" alt=""></div>
                 <!--head ad-->
                 <div class="main-content">
                     <div class="main-header">
@@ -42,7 +42,6 @@
                             <label class="col-xs-2 control-label">违章区域</label>
                             <div class="col-xs-6">
                                 <input id="city" type="text" class="form-control" name="city" readonly>
-                                <input id="citySuppliers" type="hidden" class="form-control" >
                                 <label class="icon arrow"></label>
                                 <div class="select-list" style="display: none">
                                     <!-- tab content-->
@@ -106,39 +105,7 @@
                             <div class="col-xs-6">
                                 <input type="text" class="form-control" placeholder="请输入车牌号码" name="num" id="num" >
                             </div>
-                            <div class="col-xs-4 control-label-big"><a href="./view/check-history.html">历史车辆信息</a></div>
                         </div>
-                        <!-- <div class="form-group">
-                            <label class="col-xs-2 control-label">车牌类型</label>
-                            <div class="col-xs-6 ">
-                                <div class="select-content">
-                                    <input class="form-control select-input" type="text" value="" id="cartype_text" readonly>
-                                    <div class="select-input-list" style="width:100%">
-                                        <ul>
-                                            <li onclick="selectCatType('01');" id="cartype_01">大型车</li>
-											<li onclick="selectCatType('02');" id="cartype_02">小型车</li>
-											<li onclick="selectCatType('03');" id="cartype_03">使馆汽车</li>
-											<li onclick="selectCatType('04');" id="cartype_04">领馆汽车</li>
-											<li onclick="selectCatType('05');" id="cartype_05">境外汽</li>
-											<li onclick="selectCatType('06');" id="cartype_06">外籍汽</li>
-											<li onclick="selectCatType('07');" id="cartype_07">两,三轮摩托</li>
-											<li onclick="selectCatType('08');" id="cartype_08">轻便摩托</li>
-											<li onclick="selectCatType('09');" id="cartype_09">使馆摩托</li>
-											<li onclick="selectCatType('10');" id="cartype_10">领馆摩托</li>
-											<li onclick="selectCatType('11');" id="cartype_11">境外摩托</li>
-											<li onclick="selectCatType('12');" id="cartype_12">外籍摩托</li>
-											<li onclick="selectCatType('13');" id="cartype_13">低速</li>
-											<li onclick="selectCatType('14');" id="cartype_14">拖拉机</li>
-											<li onclick="selectCatType('15');" id="cartype_15"> 挂</li>
-											<li onclick="selectCatType('16');" id="cartype_16"> 教练汽</li>
-											<li onclick="selectCatType('17');" id="cartype_17"> 教练摩托</li>
-											<li onclick="selectCatType('18');" id="cartype_18"> 试验汽</li>
-                                        </ul>
-                                    </div>
-                                    <label class="icon arrow first" for="num"></label>
-                                </div>
-                            </div>
-                        </div> -->
                         <div class="form-group">
                             <label class="col-xs-2 control-label">发动机号</label>
                             <div class="col-xs-6">
@@ -147,7 +114,7 @@
                             <div class="col-xs-4 control-label ">
                                 <span class="icon help">
                                     <div class="hint">
-                                        <img class="img-responsive" src="img/hint.png" alt="">
+                                        <img class="img-responsive" src="../img/hint.png" alt="">
                                     </div>
                                 </span>
                             </div>
@@ -160,57 +127,9 @@
                             <div class="col-xs-4 control-label prompt">
                                 <span class="icon help">
                                     <div class="hint">
-                                        <img class="img-responsive" src="img/hint.png" alt="">
+                                        <img class="img-responsive" src="../img/hint.png" alt="">
                                     </div>
                                 </span>
-                            </div>
-                        </div>
-                        <!-- <div class="form-group">
-                            <label class="col-xs-2 control-label">购车时间</label>
-                            <div class="col-xs-6 two-field">
-                                <div class="select-content">
-                                    <input type="text" id="year" class="form-control select-input" name="year" readonly>
-                                    <div class="select-input-list">
-                                        <ul id="buyyear_li"></ul>
-                                    </div>
-                                    <label class="icon arrow first" for="year"></label>
-                                </div>
-                                <div class="select-content">
-                                    <input class="form-control select-input " type="text" value="" readonly>
-                                    <div class="select-input-list">
-                                        <ul>
-                                            <li>1月</li>
-                                            <li>2月</li>
-                                            <li>3月</li>
-                                            <li>4月</li>
-                                            <li>5月</li>
-                                            <li>6月</li>
-                                            <li>7月</li>
-                                            <li>8月</li>
-                                            <li>9月</li>
-                                            <li>10月</li>
-                                            <li>11月</li>
-                                            <li>12月</li>
-                                        </ul>
-                                    </div>
-                                    <label class="icon arrow first" for="num"></label>
-                                </div>
-                            </div>
-                        </div> -->
-                        <div class="form-group">
-                            <label class="col-xs-2 control-label">手 机 号</label>
-                            <div class="col-xs-6">
-                                <input type="text" class="form-control" placeholder="请输入手机号" id="mobile" name="phone" lang="param" >
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-xs-2 control-label">验证码</label>
-                            <div class="col-xs-3 n-pdr">
-                                <input type="text" id="code" class="form-control" name="code" placeholder="请输入手机验证码">
-                                <!-- <span class="has-error">验证码错误</span> -->
-                            </div>
-                            <div class="col-xs-3">
-                              <a id="sent-msg" class="btn btn-secondary btn-block">免费获取验证码</a>
                             </div>
                         </div>
                         <div class="form-group">
@@ -226,29 +145,29 @@
                 </div>
             </div>
             <div class="col-xs-4">
-                <img class="img-responsive img-border" src="./img/sidead.jpg" alt="">
+                <img class="img-responsive img-border" src="../img/sidead.jpg" alt="">
             </div>
         </div>
     </div>
     <div class="container">
-        <img class="img-responsive" src="img/footer.jpg" alt="">
+        <img class="img-responsive" src="../img/footer.jpg" alt="">
     </div>
     <script>
-    window.jQuery || document.write('<script src="js/vendor/jquery-1.9.0.min.js"><\/script>')
+    window.jQuery || document.write('<script src="../js/vendor/jquery-1.9.0.min.js"><\/script>')
     </script>
-    <script src="js/main.js"></script>
-    <script src="js/cities.js"></script>
-    <script src="js/controller/index.js"></script>
-    <script src="js/vendor/jsrender.min.js"></script>
-    <script src="js/common/common.js"></script>
-    <script src="js/json2.min.js"></script>
-    <script src="js/common/Utility.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/cities.js"></script>
+    <script src="index.js"></script>
+    <script src="../js/vendor/jsrender.min.js"></script>
+    <script src="../js/common/common.js"></script>
+    <script src="../js/json2.min.js"></script>
+    <script src="../js/common/Utility.js"></script>
     <script id="list_template" type="text/x-jsrender">
 	  <div class="tab-list">
          <div>{{:prefix}}</div>
          <ul>
          {{for citylist}}
-             <li code="{{:name}}" abbr="" supplier="{{:suppliers}}">{{:name}}</li>
+             <li code="{{:name}}" abbr="">{{:name}}</li>
          {{/for}}
          </ul>
       </div>
