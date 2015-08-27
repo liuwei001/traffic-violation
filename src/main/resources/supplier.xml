@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 违章查询接口供应商配置
+name:运营商名称
+code:运营商编码 对应cities.js的suppliers
 url:城市供应商地址
-city_code：菜单选择的城市编码
-targetCode属性： 针对不同的供应商对城市编码的转换
+city-url:获取城市接口url
+classname：接口请求处理类
  -->
 <suppliers>
-	
-	    <supplier>
-                <description>默认供应商</description>
-                <url>http://apis.zonghengche.com:8807/weizhang/query</url>
-                <classname>com.traffic.weizhang.strategy.ZonghengcheSupplier</classname>
-        </supplier>
 
-        <supplier>
-                <description>广东--供应商</description>
-                <url>http://api.buding.cn/v3/violations</url>
-                <classname>com.traffic.weizhang.strategy.BudingSupplier</classname>
-                <cityCodes>
-                        <city_code targetCode="shenzhen">GD_ShenZhen</city_code>
-                </cityCodes>
-        </supplier>
+	<supplier>
+		<name>车营科技</name>
+		<code>1</code>
+		<url>http://apis.zonghengche.com:8807/weizhang/query</url>
+		<city-url>http://apis.zonghengche.com:8807/weizhang/citys</city-url>
+		<classname>com.traffic.weizhang.strategy.ZonghengcheSupplier</classname>
+	</supplier>
+	
+	<supplier>
+		<name>北京步鼎方舟科技有限公司</name>
+		<code>2</code>
+		<url>http://api.buding.cn/v3/violations</url>
+		<city-url>http://api.buding.cn/v3/cities</city-url>
+		<classname>com.traffic.weizhang.strategy.BudingSupplier</classname>
+	</supplier>
 
 </suppliers>

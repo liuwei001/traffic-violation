@@ -13,7 +13,7 @@ public class Result implements Serializable, Comparable<Result> {
 
 	private String fen;
 
-	private float money;
+	private String money;
 
 	private String area;
 
@@ -38,11 +38,11 @@ public class Result implements Serializable, Comparable<Result> {
 		this.fen = fen;
 	}
 
-	public float getMoney() {
+	public String getMoney() {
 		return money;
 	}
 
-	public void setMoney(float money) {
+	public void setMoney(String money) {
 		this.money = money;
 	}
 
@@ -74,7 +74,7 @@ public class Result implements Serializable, Comparable<Result> {
 	@Override
 	public boolean equals(Object obj) {
 		Result r = (Result) obj;
-		return code.equals(r.code) && fen.equals(r.fen) && (money == r.money)
+		return code.equals(r.code) && fen.equals(r.fen) && (money.equals(r.money))
 				&& area.equals(r.area) && act.equals(r.act) && date.equals(r.date);
 	}
 

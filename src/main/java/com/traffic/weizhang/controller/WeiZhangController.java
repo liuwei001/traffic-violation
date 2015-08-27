@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -27,15 +28,18 @@ import com.traffic.common.constants.Constants;
 import com.traffic.common.enumcode.ResultCodeEnum;
 import com.traffic.common.exception.DalException;
 import com.traffic.common.message.ResponseMessage;
-import com.traffic.common.utils.MD5Encrypt;
 import com.traffic.common.utils.UUIDGenerator;
 import com.traffic.common.utils.http.HttpClientUtils;
 import com.traffic.weizhang.entity.City;
 import com.traffic.weizhang.entity.Province;
 import com.traffic.weizhang.entity.Result;
+import com.traffic.weizhang.entity.Supplier;
+import com.traffic.weizhang.entity.Suppliers;
 import com.traffic.weizhang.entity.TQueryHistory;
 import com.traffic.weizhang.listener.SuppliersLoader;
 import com.traffic.weizhang.service.IQueryHistoryService;
+import com.traffic.weizhang.strategy.AbstractSuppplier;
+import com.traffic.weizhang.strategy.SuppplierContext;
 
 /**
  * 交通违章信息controller
@@ -51,12 +55,6 @@ public class WeiZhangController extends BaseController {
 	
 	@Autowired
 	private IQueryHistoryService queryHistoryService;
-	
-	@Value("${weizhang.appid}")
-	private String appid;
-	
-	@Value("${weizhang.appkey}")
-	private String appkey;
 	
 	@Value("${weizhang.citys.interface}")
 	private String citys_interface_url;
@@ -164,84 +162,143 @@ public class WeiZhangController extends BaseController {
 	@ResponseBody
 	public ResponseMessage queryList(HttpServletRequest request) {
 		JSONObject reqJsonBody = (JSONObject)request.getAttribute("reqBody");
-		/*if(StringUtils.isEmpty(query_interface_url)) {
-			logger.error("cfg.properties属性文件中没有配置违章查询接口地址,配置参数为：violation.query.interface");
-			return getResponseMsg_failed(ResultCodeEnum.SYSTEM_EXCEPTION);
-		}*/
+		
 		try {
-			reqJsonBody.put("appid", appid);
+			JSONArray jarray = new JSONArray();
+			JSONObject resultObj = new JSONObject();
 			
-			List<Result> resultList = new ArrayList<Result>();
-			
-			String cityStr = reqJsonBody.getString("city");
-			String[] citys = cityStr.split("、");
-			for(String citycode : citys) {
-				String interUrl = "";//供应商接口url
-				Map<String,String[]> supplierMap = SuppliersLoader.getCity_Supplier_Map();
-				if(!supplierMap.containsKey(citycode)) {//未配置指定的城市供应商，则通过默认供应商查询
-					String[] serpplierInfo = supplierMap.get("default");
-					interUrl = serpplierInfo[1];
-					if(logger.isDebugEnabled()) {
-						logger.debug("citycode : " + citycode + ",default url:" + interUrl);
-					}
-				} else {
-					String[] serpplierInfo = supplierMap.get(citycode);
-					citycode = serpplierInfo[0];
-					interUrl = serpplierInfo[1];
-					if(logger.isDebugEnabled()) {
-						logger.debug("citycode : " + citycode + ",url:" + interUrl);
-					}
-				}
-				String carno = reqJsonBody.getString("carno");
-				if(logger.isDebugEnabled()) {
-					logger.debug("sign key : " + (citycode + carno + appkey));
-				}
-				String sign_md5 = MD5Encrypt.encrypt(citycode + carno + appkey,"UTF-8");
-				if(logger.isDebugEnabled()) {
-					logger.debug("sign md5 : " + sign_md5);
-				}
-				//设置签名参数
-				reqJsonBody.put("sign", sign_md5);
-				reqJsonBody.put("city", citycode);
-				
-				String respBody = HttpClientUtils.httpPost_JSONObject(interUrl, reqJsonBody);
-				JSONObject respObj = JSON.parseObject(respBody);
-				if("0".equals(respObj.getString("resultCode"))) {
-					List<Result> _resultList = JSONArray.parseArray(respObj.getString("result"), Result.class);
-					if(_resultList != null && _resultList.size() > 0) {
-						resultList.addAll(_resultList);
-					}
-				} else {
-					return JSON.parseObject(respBody, ResponseMessage.class);
-				}
+			if(!reqJsonBody.containsKey("supplier")) {
+				return getResponseMsg_failed(ResultCodeEnum.REQUEST_PARAM_ISNULL);
 			}
 			
+			//获取所有供应商遍历
+			Suppliers  suppliers = SuppliersLoader.getSuppliers();
+			if(suppliers != null && suppliers.getSupplierList() != null) {
+				for(Supplier supplier : suppliers.getSupplierList()) {
+					
+					//根据参数supplier来选择运营商 比如 1： 运营商1  2：运营商2
+					if(supplier.getCode().equals(reqJsonBody.get("supplier"))) {
+						resultObj = queryResults(reqJsonBody,supplier);
+						jarray.add(resultObj);
+					}
+				}
+			}
+
+			//保存查询历史记录
 			TQueryHistory queryHistory = JSON.toJavaObject(reqJsonBody, TQueryHistory.class);
 			queryHistory.setId(UUIDGenerator.getUUID());
 			queryHistory.setCreateTime(new Date());
 			
 			Thread saveHistoryThead = new QueryHistoryThread(queryHistory);
 			saveHistoryThead.start();
-			
-			if(resultList.size() > 0) { 
-				
-				//通过hashset去重复
-				HashSet<Result> h = new HashSet<Result>(resultList);  
-				resultList.clear();  
-				resultList.addAll(h);  
-				
-				//时间排序
-				Collections.sort(resultList);
-			}
 		    
 			//移除验证码session
 			request.getSession().removeAttribute(Constants.VALIDATE_CODE);
 			
-			return getResponseMsg_success(resultList);
+			return getResponseMsg_success(jarray);
+		
 		}catch(Exception ex) {
 			logger.error(ex.getMessage());
+			ex.printStackTrace();
 			return getResponseMsg_failed(ResultCodeEnum.SYSTEM_EXCEPTION);
 		}
+	}
+	
+	
+	/**
+	 * 查询违章列表 --- 测试用
+	 * @return
+	 */
+	@RequestMapping( value = "/querylistTest",method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseMessage queryListTest(HttpServletRequest request) {
+		JSONObject reqJsonBody = (JSONObject)request.getAttribute("reqBody");
+		
+		try {
+			JSONArray jarray = new JSONArray();
+			JSONObject resultObj = new JSONObject();
+			
+			//获取所有供应商遍历
+			Suppliers  suppliers = SuppliersLoader.getSuppliers();
+			if(suppliers != null && suppliers.getSupplierList() != null) {
+				for(Supplier supplier : suppliers.getSupplierList()) {
+					resultObj = queryResults(reqJsonBody,supplier);
+					jarray.add(resultObj);
+				}
+			}
+			
+			return getResponseMsg_success(jarray);
+		
+		}catch(Exception ex) {
+			logger.error(ex.getMessage());
+			ex.printStackTrace();
+			return getResponseMsg_failed(ResultCodeEnum.SYSTEM_EXCEPTION);
+		}
+	}
+	
+	/**
+	 * 查询结果
+	 * @return
+	 */
+	private JSONObject queryResults(JSONObject reqJsonBodyParam,Supplier supplier) {
+		
+		JSONObject reqJsonBody = (JSONObject)reqJsonBodyParam.clone();
+		
+		long startTime = System.currentTimeMillis();
+		
+		JSONObject resultObj = new JSONObject();
+
+		List<Result> resultList = new ArrayList<Result>();
+		
+		String cityStr = reqJsonBody.getString("city");
+		String[] citys = cityStr.split("、");
+		
+		for(String cityName : citys) {
+			
+			if(logger.isDebugEnabled()) {
+					logger.debug("citycode : " + cityName + ",url:" + supplier.getUrl() + ",classname:" + supplier.getClassname());
+			}
+			Map<String, String> citiesMap = SuppliersLoader.getCity_Supplier_Map().get(supplier.getCode());
+			reqJsonBody.put("city", citiesMap.get(cityName));
+			
+			//根据类名反射策略对象，执行策略
+			AbstractSuppplier instance;
+			try {
+				instance = (AbstractSuppplier) Class.forName(supplier.getClassname()).newInstance();
+				SuppplierContext context = new SuppplierContext(instance);
+				JSONObject respJsonBody = context.executeQuery(reqJsonBody,supplier.getUrl());
+				
+				if("0".equals(respJsonBody.getString("resultCode"))) {
+					List<Result> _resultList = JSONArray.parseArray(respJsonBody.getString("result"), Result.class);
+					if(_resultList != null && _resultList.size() > 0) {
+						resultList.addAll(_resultList);
+					}
+				} else {
+					return null;
+				}
+				
+			} catch (Exception ex) {
+				// TODO Auto-generated catch block
+				ex.printStackTrace();
+			} 
+		}
+		
+		if(resultList.size() > 0) { 
+			//通过hashset去重复
+			HashSet<Result> h = new LinkedHashSet<Result>(resultList);  
+			resultList.clear();  
+			resultList.addAll(h);  
+			//时间排序
+			Collections.sort(resultList);
+		}
+		
+		long endTime = System.currentTimeMillis();
+		
+		resultObj.put("supplierName", supplier.getName());//供应商名称
+		resultObj.put("times", endTime - startTime);
+		resultObj.put("wzlist", resultList);
+		
+		return resultObj;
 	}
 	
 	

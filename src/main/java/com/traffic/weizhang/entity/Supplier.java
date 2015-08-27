@@ -1,7 +1,9 @@
 package com.traffic.weizhang.entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -11,28 +13,37 @@ import java.util.List;
  */
 public class Supplier {
 
-	private String description;
+	/**
+	 * 描述
+	 */
+	private String name;
 	
-	private String paramKey;
+	/**
+	 * 执行的class路径
+	 */
+	private String classname;
 	
+	/**
+	 * 接口url
+	 */
 	private String url;
 	
-	private List<CityCode> cityCodeList = new ArrayList<CityCode>();
+	/**
+	 * 运营商编码--对应cities.js城市supplier，通过这个来选择指定的运营商查询
+	 */
+	private String code;
+	
+	/**
+	 * 获取支持的城市列表接口地址	
+	 */
+	private String cityUrl;
 
-	public String getDescription() {
-		return description;
+	public String getName() {
+		return name;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getParamKey() {
-		return paramKey;
-	}
-
-	public void setParamKey(String paramKey) {
-		this.paramKey = paramKey;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getUrl() {
@@ -43,16 +54,28 @@ public class Supplier {
 		this.url = url;
 	}
 
-	public void addCityCode(CityCode citycode) {
-		cityCodeList.add(citycode);
+	public String getClassname() {
+		return classname;
 	}
 
-	public List<CityCode> getCityCodeList() {
-		return cityCodeList;
+	public void setClassname(String classname) {
+		this.classname = classname;
 	}
 
-	public void setCityCodeList(List<CityCode> cityCodeList) {
-		this.cityCodeList = cityCodeList;
+	public String getCityUrl() {
+		return cityUrl;
+	}
+
+	public void setCityUrl(String cityUrl) {
+		this.cityUrl = cityUrl;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 }

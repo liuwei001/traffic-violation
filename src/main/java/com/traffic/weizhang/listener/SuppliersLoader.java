@@ -10,9 +10,13 @@ import org.apache.commons.digester.Digester;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
-import com.traffic.weizhang.entity.CityCode;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.traffic.weizhang.entity.Result;
 import com.traffic.weizhang.entity.Supplier;
 import com.traffic.weizhang.entity.Suppliers;
+import com.traffic.weizhang.strategy.AbstractSuppplier;
+import com.traffic.weizhang.strategy.SuppplierContext;
 
 /**
  * 供应商初始化加载
@@ -23,8 +27,10 @@ public class SuppliersLoader {
 	
 	private static final Logger logger = Logger.getLogger(SuppliersLoader.class);
 	
-	private static Map<String,String[]> city_Supplier_Map = new HashMap<String, String[]>();
-
+	private static Map<String,Map<String, String>> city_Supplier_Map = new HashMap<String, Map<String, String>>();
+	
+	private static Suppliers suppliers = new Suppliers();
+	
 	public static void init() {
 		
 		logger.info("初始化加载供应商配置.....start.");
@@ -35,29 +41,38 @@ public class SuppliersLoader {
 		digester.addObjectCreate("suppliers/supplier", Supplier.class);
 		digester.addSetProperties("suppliers/supplier");
 		digester.addSetNext("suppliers/supplier", "addSupplier");
-		
-		digester.addBeanPropertySetter("suppliers/supplier/description", "description");  
+		digester.addBeanPropertySetter("suppliers/supplier/name", "name");  
+		digester.addBeanPropertySetter("suppliers/supplier/code", "code");  
 		digester.addBeanPropertySetter("suppliers/supplier/url", "url"); 
+		digester.addBeanPropertySetter("suppliers/supplier/city-url", "cityUrl"); 
+		digester.addBeanPropertySetter("suppliers/supplier/classname", "classname"); 
 		
-		digester.addObjectCreate("suppliers/supplier/cityCodes/city_code", CityCode.class);
+		/*digester.addObjectCreate("suppliers/supplier/cityCodes/city_code", CityCode.class);
 		digester.addSetProperties("suppliers/supplier/cityCodes/city_code"); 
 		digester.addBeanPropertySetter("suppliers/supplier/cityCodes/city_code", "citycode"); 
 		digester.addBeanPropertySetter("suppliers/supplier/cityCodes/city_code/targetCode", "targetCode"); 
-		digester.addSetNext("suppliers/supplier/cityCodes/city_code", "addCityCode");
-		
+		digester.addSetNext("suppliers/supplier/cityCodes/city_code", "addCityCode");*/
 		
 		try {
-			Suppliers suppliers = (Suppliers)digester.parse(inStream);
+			suppliers = (Suppliers)digester.parse(inStream);
 			List<Supplier> suppliersList = suppliers.getSupplierList();
 			for(Supplier supplier : suppliersList) {
-				List<CityCode> cityCodeList = supplier.getCityCodeList();
-				if(cityCodeList != null && cityCodeList.size() > 0) {
-					for(CityCode cityCode : cityCodeList) {
-						city_Supplier_Map.put(cityCode.getCitycode(), new String[]{cityCode.getTargetCode() == null?cityCode.getCitycode():cityCode.getTargetCode(),supplier.getUrl()});
-					}
-				} else { //默认供应商
-					city_Supplier_Map.put("default",new String[]{"", supplier.getUrl()});
-				}
+				String cityUrl = supplier.getCityUrl();
+				
+				AbstractSuppplier instance;
+				try {
+					instance = (AbstractSuppplier) Class.forName(supplier.getClassname()).newInstance();
+					SuppplierContext context = new SuppplierContext(instance);
+					
+					//将城市列表转换成 key-value:  城市名称-拼音 形式
+					Map<String, String> citiesMap = context.executeQueryCities(cityUrl);
+					//存入内存
+					city_Supplier_Map.put(supplier.getCode(), citiesMap);
+				} catch (Exception ex) {
+					// TODO Auto-generated catch block
+					ex.printStackTrace();
+					logger.error(ex.getMessage());
+				} 
 			}
 			
 			logger.info("初始化加载供应商配置....end.");
@@ -68,13 +83,24 @@ public class SuppliersLoader {
 		}
 	}
 
-	public static Map<String, String[]> getCity_Supplier_Map() {
+	public static Map<String, Map<String, String>> getCity_Supplier_Map() {
 		return city_Supplier_Map;
 	}
 
-	public static void setCity_Supplier_Map(Map<String, String[]> city_Supplier_Map) {
+	public static void setCity_Supplier_Map(Map<String, Map<String, String>> city_Supplier_Map) {
 		SuppliersLoader.city_Supplier_Map = city_Supplier_Map;
 	}
 
+	public static void main(String[] args) {
+		SuppliersLoader.init();
+	}
+
+	public static Suppliers getSuppliers() {
+		return suppliers;
+	}
+
+	public static void setSuppliers(Suppliers suppliers) {
+		SuppliersLoader.suppliers = suppliers;
+	}
 
 }
