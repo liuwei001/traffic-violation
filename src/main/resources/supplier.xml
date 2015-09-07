@@ -8,7 +8,7 @@ city-url:获取城市接口url
 classname：接口请求处理类
  -->
 <suppliers>
-	
+
 	<supplier>
 		<name>车营科技</name>
 		<code>1</code>
