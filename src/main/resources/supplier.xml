@@ -12,6 +12,8 @@ classname：接口请求处理类
 	<supplier>
 		<name>车营科技</name>
 		<code>1</code>
+		<app-id>pingan</app-id>
+		<app-key>9fdcd715d108a0bd51f481b3571ea2db</app-key>
 		<url>http://apis.zonghengche.com:8807/weizhang/query</url>
 		<city-url>http://apis.zonghengche.com:8807/weizhang/citys</city-url>
 		<classname>com.traffic.weizhang.strategy.ZonghengcheSupplier</classname>
@@ -20,6 +22,8 @@ classname：接口请求处理类
 	<supplier>
 		<name>北京步鼎方舟科技有限公司</name>
 		<code>2</code>
+		<app-id>dLSQ1ZjK7exqlwqx</app-id>
+		<app-key>uTIYrJn6vJTyt1ztBNbqQQDexDjpAM4m</app-key>
 		<url>http://api.buding.cn/v3/violations</url>
 		<city-url>http://api.buding.cn/v3/cities</city-url>
 		<classname>com.traffic.weizhang.strategy.BudingSupplier</classname>

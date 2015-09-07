@@ -15,26 +15,25 @@ import java.util.TimeZone;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.traffic.common.holder.PropertiesCfgHolder;
 import com.traffic.common.utils.DateUtil;
 import com.traffic.common.utils.MD5Encrypt;
 import com.traffic.common.utils.http.HttpClientUtils;
 import com.traffic.weizhang.entity.Result;
+import com.traffic.weizhang.entity.Supplier;
 
 /**
  * 第二家供应商
  * @author Administrator
  *
  */
-public class BudingSupplier extends AbstractSuppplier {
+public class BudingSupplier extends AbstractSuppplierStrate {
 	
 	private final Logger logger = Logger.getLogger(BudingSupplier.class);
 
 	@Override
-	public JSONObject executeQuery(JSONObject reqJsonBody, String interUrl) {
+	public JSONObject executeQuery(JSONObject reqJsonBody, Supplier supplier) {
 		
 		//将cst时间格式转换为GMT时间格式
 		DateFormat format=new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH);
@@ -59,12 +58,12 @@ public class BudingSupplier extends AbstractSuppplier {
 			return resultJsonObj;
 		}
 		//计算签名
-		String SIGNATURE = MD5Encrypt.encrypt("POST&/v3/violations&"+date+"&"+builder.toString().length()+"&"+ MD5Encrypt.encrypt(PropertiesCfgHolder.getProperty("buding.secret")));
+		String SIGNATURE = MD5Encrypt.encrypt("POST&/v3/violations&"+date+"&"+builder.toString().length()+"&"+ MD5Encrypt.encrypt(supplier.getAppKey()));
 		
 		//设置请求头
 		Map<String, String> headers = new HashMap<String, String>();
 		headers.put("Host", "api.buding.cn");
-		headers.put("Authorization", PropertiesCfgHolder.getProperty("buding.appkey")+":" + SIGNATURE);
+		headers.put("Authorization", supplier.getAppId()+":" + SIGNATURE);
 		headers.put("Date", date);
 //		System.out.println(JSON.toJSONString(headers));
 		JSONObject reqParam = new JSONObject();
@@ -72,7 +71,7 @@ public class BudingSupplier extends AbstractSuppplier {
 		reqParam.put("engine_num", engineno);
 		reqParam.put("body_num", classno);
 		reqParam.put("city_pinyin", citycode);
-		String respBody = HttpClientUtils.httpPost_JSONObject(interUrl,headers, reqParam);
+		String respBody = HttpClientUtils.httpPost_JSONObject(supplier.getUrl(),headers, reqParam);
 		Map<String,Object> respMap = new HashMap<String, Object>();
 		if(StringUtils.isNotEmpty(respBody)) {
 			JSONObject respJsonObj = JSONObject.parseObject(respBody);
@@ -125,22 +124,6 @@ public class BudingSupplier extends AbstractSuppplier {
 			logger.error("获取城市信息出错：" + ex.getMessage());
 		}
 		return citiesMap;
-	}
-
-	
-	 public static void main(String[] args) {
-	
-		 BudingSupplier supplier = new BudingSupplier();
-		 JSONObject reqJsonBody = new JSONObject();
-		reqJsonBody.put("carno", "粤BA804D");
-		 reqJsonBody.put("engineno", "C32764");
-		 reqJsonBody.put("classno", "064484");
-		 reqJsonBody.put("city", "shenzhen");
-		 
-			
-		 //{"carType":"02","engineno":"C32764","carno":"粤BA804D","classno":"064484","mobile":"18675574642","city":"GD_ShenZhen"}
-		 
-		 System.out.println(supplier.executeQuery(reqJsonBody, "http://api.buding.cn/v3/violations"));
 	}
 
 }

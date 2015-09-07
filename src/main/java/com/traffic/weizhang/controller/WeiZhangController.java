@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,16 +28,13 @@ import com.traffic.common.enumcode.ResultCodeEnum;
 import com.traffic.common.exception.DalException;
 import com.traffic.common.message.ResponseMessage;
 import com.traffic.common.utils.UUIDGenerator;
-import com.traffic.common.utils.http.HttpClientUtils;
-import com.traffic.weizhang.entity.City;
-import com.traffic.weizhang.entity.Province;
 import com.traffic.weizhang.entity.Result;
 import com.traffic.weizhang.entity.Supplier;
 import com.traffic.weizhang.entity.Suppliers;
 import com.traffic.weizhang.entity.TQueryHistory;
 import com.traffic.weizhang.listener.SuppliersLoader;
 import com.traffic.weizhang.service.IQueryHistoryService;
-import com.traffic.weizhang.strategy.AbstractSuppplier;
+import com.traffic.weizhang.strategy.AbstractSuppplierStrate;
 import com.traffic.weizhang.strategy.SuppplierContext;
 
 /**
@@ -51,75 +47,8 @@ public class WeiZhangController extends BaseController {
 
 	private final Logger logger = Logger.getLogger(WeiZhangController.class);
 	
-	private static Map<String, List<City>> citysMap = new HashMap<String, List<City>>();
-	
 	@Autowired
 	private IQueryHistoryService queryHistoryService;
-	
-	@Value("${weizhang.citys.interface}")
-	private String citys_interface_url;
-	
-	/**
-	 * 查询城市
-	 * @return
-	 */
-	@RequestMapping( value = "/citylist",method = RequestMethod.GET)
-	@ResponseBody
-	public ResponseMessage cityList(HttpServletRequest request) {
-		String reflushCityList = request.getParameter("reflush"); //当reflush参数为1时，重新查询接口，否则查询内存缓存
-		if(citysMap == null || citysMap.keySet().size() == 0 || reflushCityList == "1") {
-			if(StringUtils.isEmpty(citys_interface_url)) {
-				logger.error("cfg.properties属性文件中没有配置城市查询接口地址,配置参数为：weizhang.citys.interface");
-				return getResponseMsg_failed(ResultCodeEnum.SYSTEM_EXCEPTION);
-			}
-			
-			String respBody = HttpClientUtils.httpGet(citys_interface_url);
-
-			try {
-				if(StringUtils.isNotBlank(respBody)) {
-					ResponseMessage respMsg = JSON.parseObject(respBody, ResponseMessage.class);
-					if("0".equals(respMsg.getResultCode())) {
-						List<Province> provinces = JSONArray.parseArray(JSON.toJSONString(respMsg.getResult()), Province.class);
-						if(provinces != null && provinces.size() > 0) {
-							for(Province province : provinces) {
-								if(province.getCitys() != null) {
-									for(City city : province.getCitys()) {
-										String province_code = province.getProvince_code();
-										String city_full_code = city.getCity_code();
-										char start_char ;
-										if(city_full_code.indexOf("_") > 0) {
-											String city_code = city_full_code.substring(province_code.length() + 1);
-											start_char = city_code.charAt(0);
-										} else {
-											start_char = city_full_code.charAt(0);
-										}
-										
-										if(citysMap.containsKey(String.valueOf(start_char))) {
-											citysMap.get(String.valueOf(start_char)).add(city);
-										} else {
-											List<City> cityList = new ArrayList<City>();
-											cityList.add(city);
-											citysMap.put(String.valueOf(start_char), cityList);
-										}
-										
-									}
-								}
-							}
-						}
-					}
-				}
-			}catch(Exception ex) {
-				ex.printStackTrace();
-				return getResponseMsg_failed(ResultCodeEnum.SYSTEM_EXCEPTION);
-			}
-			
-		} 
-		
-		ResponseMessage resMsg = new ResponseMessage();
-		resMsg.setResult(citysMap);
-		
-		return resMsg;
-	}
 	
 	/**
 	 * 查询历史车辆列表
@@ -206,7 +135,7 @@ public class WeiZhangController extends BaseController {
 	
 	
 	/**
-	 * 查询违章列表 --- 测试用
+	 * 查询违章列表 --- 测试用，显示多个供应商的查询结果
 	 * @return
 	 */
 	@RequestMapping( value = "/querylistTest",method = RequestMethod.POST)
@@ -262,11 +191,11 @@ public class WeiZhangController extends BaseController {
 			reqJsonBody.put("city", citiesMap.get(cityName));
 			
 			//根据类名反射策略对象，执行策略
-			AbstractSuppplier instance;
+			AbstractSuppplierStrate instance;
 			try {
-				instance = (AbstractSuppplier) Class.forName(supplier.getClassname()).newInstance();
+				instance = (AbstractSuppplierStrate) Class.forName(supplier.getClassname()).newInstance();
 				SuppplierContext context = new SuppplierContext(instance);
-				JSONObject respJsonBody = context.executeQuery(reqJsonBody,supplier.getUrl());
+				JSONObject respJsonBody = context.executeQuery(reqJsonBody,supplier);
 				
 				if("0".equals(respJsonBody.getString("resultCode"))) {
 					List<Result> _resultList = JSONArray.parseArray(respJsonBody.getString("result"), Result.class);

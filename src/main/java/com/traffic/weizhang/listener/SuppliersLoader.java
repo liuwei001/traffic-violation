@@ -10,12 +10,9 @@ import org.apache.commons.digester.Digester;
 import org.apache.log4j.Logger;
 import org.xml.sax.SAXException;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.traffic.weizhang.entity.Result;
 import com.traffic.weizhang.entity.Supplier;
 import com.traffic.weizhang.entity.Suppliers;
-import com.traffic.weizhang.strategy.AbstractSuppplier;
+import com.traffic.weizhang.strategy.AbstractSuppplierStrate;
 import com.traffic.weizhang.strategy.SuppplierContext;
 
 /**
@@ -43,15 +40,11 @@ public class SuppliersLoader {
 		digester.addSetNext("suppliers/supplier", "addSupplier");
 		digester.addBeanPropertySetter("suppliers/supplier/name", "name");  
 		digester.addBeanPropertySetter("suppliers/supplier/code", "code");  
+		digester.addBeanPropertySetter("suppliers/supplier/app-id", "appId");  
+		digester.addBeanPropertySetter("suppliers/supplier/app-key", "appKey");  
 		digester.addBeanPropertySetter("suppliers/supplier/url", "url"); 
 		digester.addBeanPropertySetter("suppliers/supplier/city-url", "cityUrl"); 
 		digester.addBeanPropertySetter("suppliers/supplier/classname", "classname"); 
-		
-		/*digester.addObjectCreate("suppliers/supplier/cityCodes/city_code", CityCode.class);
-		digester.addSetProperties("suppliers/supplier/cityCodes/city_code"); 
-		digester.addBeanPropertySetter("suppliers/supplier/cityCodes/city_code", "citycode"); 
-		digester.addBeanPropertySetter("suppliers/supplier/cityCodes/city_code/targetCode", "targetCode"); 
-		digester.addSetNext("suppliers/supplier/cityCodes/city_code", "addCityCode");*/
 		
 		try {
 			suppliers = (Suppliers)digester.parse(inStream);
@@ -59,9 +52,9 @@ public class SuppliersLoader {
 			for(Supplier supplier : suppliersList) {
 				String cityUrl = supplier.getCityUrl();
 				
-				AbstractSuppplier instance;
+				AbstractSuppplierStrate instance;
 				try {
-					instance = (AbstractSuppplier) Class.forName(supplier.getClassname()).newInstance();
+					instance = (AbstractSuppplierStrate) Class.forName(supplier.getClassname()).newInstance();
 					SuppplierContext context = new SuppplierContext(instance);
 					
 					//将城市列表转换成 key-value:  城市名称-拼音 形式

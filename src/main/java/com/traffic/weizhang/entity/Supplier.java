@@ -1,9 +1,5 @@
 package com.traffic.weizhang.entity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -32,6 +28,11 @@ public class Supplier {
 	 * 运营商编码--对应cities.js城市supplier，通过这个来选择指定的运营商查询
 	 */
 	private String code;
+	
+	/** 权限校验 apid appkey **/
+	private String appId;
+	
+	private String appKey;
 	
 	/**
 	 * 获取支持的城市列表接口地址	
@@ -76,6 +77,22 @@ public class Supplier {
 
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+
+	public String getAppKey() {
+		return appKey;
+	}
+
+	public void setAppKey(String appKey) {
+		this.appKey = appKey;
 	}
 
 }
