@@ -197,7 +197,7 @@ public class WeiZhangController extends BaseController {
 				SuppplierContext context = new SuppplierContext(instance);
 				JSONObject respJsonBody = context.executeQuery(reqJsonBody,supplier);
 				
-				if("0".equals(respJsonBody.getString("resultCode"))) {
+				if(respJsonBody != null && "0".equals(respJsonBody.getString("resultCode"))) {
 					List<Result> _resultList = JSONArray.parseArray(respJsonBody.getString("result"), Result.class);
 					if(_resultList != null && _resultList.size() > 0) {
 						resultList.addAll(_resultList);

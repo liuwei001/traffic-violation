@@ -141,7 +141,7 @@
 	        			for(var i = 0; i < suppliers.length; i++) {
 	        				
 	        				if(suppliers[i] == null) {
-	        		        	$("#weizhang_info").append("<h5>运营商："+ suppliers[i].supplierName +" &nbsp;&nbsp;&nbsp;&nbsp;查询耗时： "+ suppliers[i].times +" ms</h5><div class='no-result'><span style='font-size:12px;color:red'>系统请求出错："+ data.resultMsg +"</span></div>");
+	        		        	$("#weizhang_info").append("<div class='no-result'><span style='font-size:12px;color:red'>系统请求出错："+ data.resultMsg +"</span></div>");
 	        				} else {
 	        					if(suppliers[i].wzlist == "") {
 		        	        		var date = new Date();
@@ -156,7 +156,7 @@
 		        	        	        strDate = "0" + strDate;
 		        	        	    }
 		        	        	    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate + " 00:00:00";
-		        	        		$("#weizhang_info").append("<h5>运营商："+ suppliers[i].supplierName +" &nbsp;&nbsp;&nbsp;&nbsp;查询耗时： "+ suppliers[i].times +" ms</h5><div class='no-result'> <p><span class=\"rs-icon\"></span><strong class=\"text-primary\">恭喜,</strong> 该车辆暂无违章记录，数据更新至"+ currentdate +"</p></div>");
+		        	        		$("#weizhang_info").append("<div class='no-result'> <p><span class=\"rs-icon\"></span><strong class=\"text-primary\">恭喜,</strong> 该车辆暂无违章记录，数据更新至"+ currentdate +"</p></div>");
 		
 		        				} else {
 		        					$("#weizhang_info").append($("#list_template").render(suppliers[i]));

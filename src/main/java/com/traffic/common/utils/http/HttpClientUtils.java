@@ -193,9 +193,15 @@ public class HttpClientUtils {
 		HttpEntity entity = null;
 		String result = "";
 		try {
-			httpclient = HttpConnectionManager.getHttpClient();
+//			httpclient = HttpConnectionManager.getHttpClient();
+			httpclient = new DefaultHttpClient();
 			httpclient.getParams().setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, "UTF-8");  
 			httpGet = new HttpGet(url);
+            
+			// 设置连接超时时间
+			HttpConnectionParams.setConnectionTimeout(httpclient.getParams(),40000);
+			// 设置读数据超时时间
+			HttpConnectionParams.setSoTimeout(httpGet.getParams(),200000);
 			
 			response = httpclient.execute(httpGet);
 			int statusCode = response.getStatusLine().getStatusCode();

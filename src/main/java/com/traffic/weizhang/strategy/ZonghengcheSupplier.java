@@ -49,6 +49,8 @@ public class ZonghengcheSupplier extends AbstractSuppplierStrate {
 
 		String respBody = HttpClientUtils.httpPost_JSONObject(supplier.getUrl(), reqJsonBody);
 		
+		if(respBody == null) return null;
+		
 		JSONObject respObj = JSON.parseObject(respBody);
 		
 		return respObj;
