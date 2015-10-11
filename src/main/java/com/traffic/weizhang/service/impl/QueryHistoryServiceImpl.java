@@ -6,25 +6,25 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.traffic.common.base.mapper.BaseMapper;
+import com.traffic.common.base.dao.BaseDao;
 import com.traffic.common.base.service.impl.BaseServiceImpl;
+import com.traffic.weizhang.dao.QueryHistoryDao;
 import com.traffic.weizhang.entity.TQueryHistory;
-import com.traffic.weizhang.mapper.QueryHistoryMapper;
 import com.traffic.weizhang.service.IQueryHistoryService;
 
 @Service("queryHistoryService")
 public class QueryHistoryServiceImpl extends BaseServiceImpl implements IQueryHistoryService{
 
 	@Autowired
-	private QueryHistoryMapper queryHistoryMapper;
+	private QueryHistoryDao queryHistoryDao;
 	
 	@Override
-	public BaseMapper getMapper() {
+	public BaseDao getDao() {
 		// TODO Auto-generated method stub
-		return queryHistoryMapper;
+		return queryHistoryDao;
 	}
 
 	public List<TQueryHistory> queryForCheck(Map<String, String> mapparam) {
-		return queryHistoryMapper.queryForCheck(mapparam);
+		return queryHistoryDao.queryForCheck(mapparam);
 	}
 }

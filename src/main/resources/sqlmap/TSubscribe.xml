@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
 
-<mapper namespace="com.traffic.weizhang.mapper.SubscribeMapper">
+<sqlMap namespace="com.traffic.weizhang.dao.SubscribeDao">
 
 	<!-- 查询sql结果与java model映射 -->
-	<resultMap id="BaseResultMap" type="com.traffic.weizhang.entity.TSubscribe">
+	<resultMap id="BaseResultMap" class="com.traffic.weizhang.entity.TSubscribe">
 		<result property="id" column="id" />
 		<result property="mobile" column="mobile" />
 		<result property="carno" column="carno" />
@@ -21,54 +22,54 @@
 		id, mobile,carno,city,engineno,classno,  carmodel, cartype, create_time,lastsend_time
 	</sql>
 
-	<select id="findById" parameterType="java.lang.String"
+	<select id="findById" parameterClass="java.lang.String"
 		resultMap="BaseResultMap">   
         <![CDATA[
 	    SELECT
 			  ]]>
 			  <include refid="table_fields"/>
 		   <![CDATA[	  
-		FROM t_subscribe where id = #{id}
+		FROM t_subscribe where id = #id#
 		 ]]>
 	  
 	</select>
 
-	<delete id="deleteByKey" parameterType="java.lang.String">
+	<delete id="deleteByKey" parameterClass="java.lang.String">
    	 <![CDATA[
-   	 	DELETE FROM t_subscribe WHERE id = #{id}
+   	 	DELETE FROM t_subscribe WHERE id = #id#
    	 ]]>
 	</delete>
 
 	<!-- 保存 -->
-	<insert id="insert" parameterType="com.traffic.weizhang.entity.TSubscribe">
+	<insert id="insert" parameterClass="com.traffic.weizhang.entity.TSubscribe">
 		 <![CDATA[
 	  	 INSERT INTO t_subscribe (
 			  ]]>
 			  <include refid="table_fields"/>
 		   <![CDATA[	  
 		) VALUES (
-				#{id}, #{mobile}, #{carno}, #{city}, #{engineno}, #{classno}, #{carmodel}, #{cartype}, #{createTime},#{lastsendTime}
+				#id#, #mobile#, #carno#, #city#, #engineno#, #classno#, #carmodel#, #cartype#, #createTime#,#lastsendTime#
 			)
 		 ]]>
 	</insert>
 	
 
-    <select id="queryList"  parameterType="java.util.HashMap"   resultMap="BaseResultMap">                                               
+    <select id="queryList"  parameterClass="java.util.HashMap"   resultMap="BaseResultMap">                                               
 			<![CDATA[
 			SELECT  ]]>
 			<include refid="table_fields"/>
 			<![CDATA[
-			 FROM t_subscribe WHERE mobile = #{mobile}  ORDER BY create_time DESC
+			 FROM t_subscribe WHERE mobile = #mobile#  ORDER BY create_time DESC
 		  	  ]]>
      </select>
      
-     <select id="queryForCheck"  parameterType="java.util.HashMap"   resultMap="BaseResultMap">                                               
+     <select id="queryForCheck"  parameterClass="java.util.HashMap"   resultMap="BaseResultMap">                                               
 			<![CDATA[
 			SELECT  ]]>
 			<include refid="table_fields"/>
 			<![CDATA[
-			 FROM t_subscribe WHERE mobile = #{mobile}  AND carno = #{carno}
+			 FROM t_subscribe WHERE mobile = #mobile#  AND carno = #carno#
 		  	  ]]>
      </select>
 
-</mapper>
+</sqlMap>

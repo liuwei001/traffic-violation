@@ -7,10 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.traffic.common.base.BaseController;
 import com.traffic.common.constants.Constants;
@@ -21,7 +22,7 @@ import com.traffic.common.message.ResponseMessage;
  * @author Administrator
  *
  */
-@RestController
+@Controller
 @RequestMapping("/validatemsg")
 public class ValidateMsgController extends BaseController {
 	
@@ -39,6 +40,7 @@ public class ValidateMsgController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping( value = "/send",method = RequestMethod.GET)
+	@ResponseBody
 	public ResponseMessage sendValidateMsg(HttpServletRequest request) {
 		long validatecode = (int)((Math.random()*9+1)*100000);
 		logger.info("validatecode = " + validatecode);
@@ -53,6 +55,7 @@ public class ValidateMsgController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping( value = "/check/{validatecode}",method = RequestMethod.GET)
+	@ResponseBody
 	public ResponseMessage checkValidateMsg(HttpServletRequest request,@PathVariable long validatecode) {
 		Long[] vcode_info = (Long[])request.getSession().getAttribute(Constants.VALIDATE_CODE);
 		if(vcode_info == null) {

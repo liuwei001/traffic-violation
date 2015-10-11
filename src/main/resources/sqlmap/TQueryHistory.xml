@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN"
+"http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="com.traffic.weizhang.dao.QueryHistoryDao">
+
+	<!-- 查询sql结果与java model映射-->
+	 <resultMap id="BaseResultMap" class="com.traffic.weizhang.entity.TQueryHistory">
+	 
+	 	<result property="id" column="id" />
+		<result property="mobile" column="mobile" />
+		<result property="carno" column="carno" />
+		<result property="city" column="city" />
+		<result property="engineno" column="engineno" />
+		<result property="classno" column="classno" />
+		<result property="carmodel" column="carmodel" />
+		<result property="cartype" column="cartype" />
+		<result property="createTime" column="create_time" />
+     </resultMap>
+     
+     
+     
+     <sql id="table_fields">
+		id, mobile,carno,city,engineno,classno,  carmodel, cartype, create_time
+	</sql>
+
+	<select id="findById" parameterClass="java.lang.String"
+		resultMap="BaseResultMap">   
+        <![CDATA[
+	    SELECT
+			  ]]>
+			  <include refid="table_fields"/>
+		   <![CDATA[	  
+		FROM t_query_history where id = #id#
+		 ]]>
+	  
+	</select>
+	
+	<delete id="deleteByKey" parameterClass="com.traffic.weizhang.entity.TQueryHistory">
+   	 <![CDATA[
+   	 	DELETE FROM t_query_history WHERE id = #id#
+   	 ]]>
+	</delete>
+
+	<!-- 保存 -->
+	<insert id="insert" parameterClass="com.traffic.weizhang.entity.TQueryHistory">
+		 <![CDATA[
+	  	 INSERT INTO t_query_history (
+			  ]]>
+			  <include refid="table_fields"/>
+		   <![CDATA[	  
+		) VALUES (
+				#id#, #mobile#, #carno#, #city#, #engineno#, #classno#, #carmodel#, #cartype#, #createTime#
+			)
+		 ]]>
+	</insert>
+	
+
+    <select id="queryList"  parameterClass="java.util.HashMap"   resultMap="BaseResultMap">                                               
+			<![CDATA[
+			SELECT  ]]>
+			<include refid="table_fields"/>
+			<![CDATA[
+			 FROM t_query_history WHERE mobile = #mobile#  ORDER BY create_time DESC
+		  	  ]]>
+     </select>
+     
+     <select id="queryForCheck"  parameterClass="java.util.HashMap"   resultMap="BaseResultMap">                                               
+			<![CDATA[
+			SELECT  ]]>
+			<include refid="table_fields"/>
+			<![CDATA[
+			 FROM t_query_history WHERE mobile = #mobile#  AND carno = #carno#
+		  	  ]]>
+     </select>
+</sqlMap>

@@ -12,6 +12,7 @@
 	default-lazy-init="false" xmlns:lang="http://www.springframework.org/schema/lang"
 	xmlns:p="http://www.springframework.org/schema/p" xmlns:task="http://www.springframework.org/schema/task"
 	xmlns:int-file="http://www.springframework.org/schema/integration/file"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
 	xsi:schemaLocation="http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
 		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
 		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee.xsd
@@ -30,53 +31,65 @@
 		http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
 		">
-
-	<description>Spring MVC Configuration</description>
-	
-	<mvc:annotation-driven />
-	<mvc:default-servlet-handler /><!-- 对静态资源文件的访问， 将无法mapping到Controller的path交给default servlet handler处理 -->
-
-	<!-- 加载配置属性文件 -->
 	<context:property-placeholder
-		ignore-unresolvable="true" location="classpath:cfg.properties" />
-
-
-	<!-- 使用Annotation自动注册Bean,只扫描@Controller -->
-	<context:component-scan base-package="com.traffic"
-		use-default-filters="false"><!-- base-package 如果多个，用“,”分隔 -->
-		<context:include-filter type="annotation"
-			expression="org.springframework.stereotype.Controller" />
-	</context:component-scan>
-
-	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-        <property name="messageConverters">
-            <list>
-                <ref bean="stringHttpMessageConverter" />
-                <ref bean="jsonHttpMessageConverter" />
-            </list>
-        </property>
-    </bean>
-    
-    <bean id="stringHttpMessageConverter" class="org.springframework.http.converter.StringHttpMessageConverter" /> 
-	<bean id="jsonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
-
-	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="viewClass"
-			value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/" />
-		<property name="suffix" value=".jsp" />
+		location='classpath:cfg.properties' />
+	
+	<!-- 使用Annotation自动注册Bean，解决事物失效问题：在主容器中不扫描@Controller注解，在SpringMvc中只扫描@Controller注解。  -->
+	<context:component-scan base-package="com.traffic"><!-- base-package 如果多个，用“,”分隔 -->
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan> 
+		
+	<!--单数据源事务控制 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+    <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter"></bean>
+	
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		 <!-- 数据源驱动类可不写，Druid默认会自动根据URL识别DriverClass -->
+	    <property name="driverClassName" value="${jdbc.driver}" />
+	    
+		<!-- 基本属性 url、user、password -->
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="${jdbc.pool.init}" />
+		<property name="minIdle" value="${jdbc.pool.minIdle}" /> 
+		<property name="maxActive" value="${jdbc.pool.maxActive}" />
+		
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="60000" />
+		
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		
+		<!-- 配置监控统计拦截的filters -->
+	    <property name="filters" value="stat-filter" /> 
 	</bean>
 
-	<bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter" />
-	<bean
-		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" /> 
-
-	<mvc:resources mapping="/js/**" location="/js/" />
-	<mvc:resources mapping="/css/**" location="/css/" />
-	<mvc:resources mapping="/img/**" location="/img/" />
-	<mvc:resources mapping="/view/**" location="/view/" />
-	<mvc:resources mapping="/test/**" location="/test/" />
-
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation">
+			<value>classpath:sql-map-config.xml</value>
+		</property>
+		<property name="mappingLocations">
+			<value>classpath*:sqlmap/*.xml</value>
+		</property>
+		<property name="dataSource" ref="dataSource" />
+		<property name="useTransactionAwareDataSource" value="true"></property>
+	</bean>
 
 </beans>

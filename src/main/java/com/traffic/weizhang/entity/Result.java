@@ -3,7 +3,10 @@ package com.traffic.weizhang.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import com.traffic.common.utils.CustomDateSerializer;
+
 
 public class Result implements Serializable, Comparable<Result> {
 
@@ -19,7 +22,6 @@ public class Result implements Serializable, Comparable<Result> {
 
 	private String act;
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date date;
 
 	public String getCode() {
@@ -62,6 +64,7 @@ public class Result implements Serializable, Comparable<Result> {
 		this.act = act;
 	}
 
+	@JsonSerialize(using = CustomDateSerializer.class)
 	public Date getDate() {
 		return date;
 	}

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.traffic.common.base.mapper.BaseMapper;
+import com.traffic.common.base.dao.BaseDao;
 import com.traffic.common.base.service.IBaseService;
 import com.traffic.common.exception.DalException;
 import com.traffic.common.page.PageInfo;
@@ -23,7 +23,7 @@ public abstract class BaseServiceImpl	implements IBaseService {
 	private final int PAGE_SIZE = 10;
 
 	/*** 获取dao类 **/
-	public abstract BaseMapper getMapper();
+	public  abstract BaseDao getDao();
 	
 	/**
 	 * 根据id查询实体
@@ -31,7 +31,7 @@ public abstract class BaseServiceImpl	implements IBaseService {
 	@Override
 	public <T extends Serializable> T findById(Serializable id)
 			throws DalException {
-		return getMapper().findById(id);
+		return getDao().findById(id);
 	}
 
 	/**
@@ -39,7 +39,7 @@ public abstract class BaseServiceImpl	implements IBaseService {
 	 */
 	@Override
 	public <T extends Serializable> void saveEntity(T entity) throws DalException {
-		getMapper().insert(entity);
+		getDao().insert(entity);
 	}
 
 	/**
@@ -47,7 +47,7 @@ public abstract class BaseServiceImpl	implements IBaseService {
 	 */
 	@Override
 	public <T extends Serializable> void updateEntity(T entity) throws DalException {
-		getMapper().update(entity);
+		getDao().update(entity);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public abstract class BaseServiceImpl	implements IBaseService {
 	 */
 	@Override
 	public void deleteByKey(Serializable entity) throws DalException {
-		getMapper().deleteByKey(entity);
+		getDao().deleteByKey(entity);
 	}
 
 	
@@ -65,7 +65,7 @@ public abstract class BaseServiceImpl	implements IBaseService {
 	@Override
 	public <T extends Serializable> List<T> findAll()
 			throws DalException {
-		return getMapper().findAll();
+		return getDao().findAll();
 	}
 	
 	/**
@@ -76,7 +76,7 @@ public abstract class BaseServiceImpl	implements IBaseService {
 	 */
 	public <T extends Serializable> List<T> queryList(Map<String, Object> map)
 			throws DalException {
-		return getMapper().queryList(map);
+		return getDao().queryList(map);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public abstract class BaseServiceImpl	implements IBaseService {
 //        long startTime = System.currentTimeMillis();
         try
         {
-        	 totalRows = getMapper().getRowCount(map);
+        	 totalRows = getDao().getRowCount(map);
         }catch (Exception e) {
             throw new DalException(e);
         }
@@ -127,7 +127,7 @@ public abstract class BaseServiceImpl	implements IBaseService {
         	}
         	map.put("skipIndex", skipIndex);
         	map.put(PageInfo.PAGE_SIZE, pageSize);
-        	List<T> queryResult = getMapper().queryForPageList(map);
+        	List<T> queryResult = getDao().queryForPageList(map);
         	
             if (queryResult != null)
             {

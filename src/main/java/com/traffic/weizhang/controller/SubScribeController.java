@@ -8,9 +8,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.traffic.common.base.BaseController;
@@ -27,7 +28,7 @@ import com.traffic.weizhang.service.ISubscribeService;
  * @author Administrator
  *
  */
-@RestController
+@Controller
 @RequestMapping("/subscribe")
 public class SubScribeController extends BaseController {
 
@@ -40,6 +41,7 @@ public class SubScribeController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping( value = "/save",method = RequestMethod.POST)
+	@ResponseBody
 	public ResponseMessage save(HttpServletRequest request) {
 	
 		JSONObject jsonObj = (JSONObject)request.getAttribute("reqBody");
