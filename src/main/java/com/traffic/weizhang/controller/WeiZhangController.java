@@ -203,7 +203,7 @@ public class WeiZhangController extends BaseController {
 						resultList.addAll(_resultList);
 					}
 				} else {
-					return null;
+					return respJsonBody;
 				}
 				
 			} catch (Exception ex) {

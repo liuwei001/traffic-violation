@@ -139,9 +139,8 @@
 	        		$("#weizhang_info").html("");
 	        		if(suppliers != null && suppliers.length > 0) {
 	        			for(var i = 0; i < suppliers.length; i++) {
-	        				
-	        				if(suppliers[i] == null) {
-	        		        	$("#weizhang_info").append("<div class='no-result'><span style='font-size:12px;color:red'>系统请求出错："+ data.resultMsg +"</span></div>");
+	        				if(suppliers[i].resultCode != undefined) {
+	        					$("#weizhang_info").append("<div class='no-result'><span style='font-size:12px;color:red'>系统请求出错："+ suppliers[i].resultMsg +"</span></div>");
 	        				} else {
 	        					if(suppliers[i].wzlist == "") {
 		        	        		var date = new Date();
